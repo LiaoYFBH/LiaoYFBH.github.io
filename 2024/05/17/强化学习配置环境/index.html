@@ -16,26 +16,27 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文为对线性系统的能控性和能观测性的知识点总结">
+    <meta name="description" content="在WSL ubuntu 20.04下，配置配置强化学习环境(PyTorch、Anaconda、Jupyter NoteBook)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线性系统的能控性和能观测性">
-<meta property="og:url" content="http://example.com/2024/05/17/%E7%8E%B0%E6%8E%A7%E7%AC%AC%E5%9B%9B%E7%AB%A0/index.html">
+<meta property="og:title" content="Linux下配置强化学习环境">
+<meta property="og:url" content="http://example.com/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="本文为对线性系统的能控性和能观测性的知识点总结">
+<meta property="og:description" content="在WSL ubuntu 20.04下，配置配置强化学习环境(PyTorch、Anaconda、Jupyter NoteBook)">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/assets/%E5%B0%81%E9%9D%A21.png">
+<meta property="og:image" content="http://example.com/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/assets/image-20240428182007432.png">
+<meta property="og:image" content="http://example.com/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/assets/image-20240512133610159.png">
+<meta property="og:image" content="http://example.com/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/assets/image-20240512133954633.png">
+<meta property="og:image" content="http://example.com/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/assets/image-20240512145155947.png">
 <meta property="article:published_time" content="2024-05-17T04:08:07.000Z">
-<meta property="article:modified_time" content="2024-05-17T08:59:22.030Z">
+<meta property="article:modified_time" content="2024-05-17T10:28:21.194Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="现代控制理论">
-<meta property="article:tag" content="能控性">
-<meta property="article:tag" content="能观性">
+<meta property="article:tag" content="强化学习环境配置">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/assets/%E5%B0%81%E9%9D%A21.png">
+<meta name="twitter:image" content="http://example.com/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/assets/image-20240428182007432.png">
   
   
   
-  <title>线性系统的能控性和能观测性 - Hexo</title>
+  <title>Linux下配置强化学习环境 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="线性系统的能控性和能观测性"></span>
+            <span id="subtitle" data-typed-text="Linux下配置强化学习环境"></span>
           
         </div>
 
@@ -224,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k words
+          455 words
         
       </span>
     
@@ -235,7 +236,7 @@
         
         
         
-          14 mins
+          4 mins
         
       </span>
     
@@ -272,269 +273,85 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">线性系统的能控性和能观测性</h1>
+            <h1 id="seo-header">Linux下配置强化学习环境</h1>
             
             
               <div class="markdown-body">
                 
-                <p>本文为对线性系统的能控性和能观测性的知识点总结 <span id="more"></span> ##
-线性系统的能控性和能观测性</p>
-<h3 id="能控性和能观测性的定义">1、能控性和能观测性的定义</h3>
-<p>直观上的理解：</p>
-<p>能控性：指系统内的所有状态是否可以由输入影响</p>
-<p>能观测性：指系统内的所有状态是否可以由输出反映</p>
-<h3 id="线性连续系统的能控性判据">2、线性连续系统的能控性判据</h3>
+                <p>在WSL ubuntu 20.04下，配置配置强化学习环境(PyTorch、Anaconda、Jupyter
+NoteBook) <span id="more"></span></p>
+<h2 id="一-linux下配置强化学习环境">一、 Linux下配置强化学习环境</h2>
+<p>我个人使用的WSL ubuntu 20.04，PyTorch、Anaconda、Jupyter NoteBook</p>
+<h3 id="安装anaconda">1.1 安装Anaconda</h3>
+<p>到官网下载相应版本<a
+target="_blank" rel="noopener" href="https://www.anaconda.com/download/success">Download Now |
+Anaconda</a></p>
+<p>例如我下载的是Anaconda3-2024.02-1-Linux-x86_64.sh</p>
+<p>打开下载路径，运行</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">bash</span> Anaconda3-<span class="hljs-number">2024</span>.<span class="hljs-number">02</span>-<span class="hljs-number">1</span>-Linux-x86_64.sh<br></code></pre></td></tr></table></figure>
+<p>出现下列提示：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk">If yo<span class="hljs-string">u&#x27;d prefer that conda&#x27;</span>s base environment not be activated on startup,<br>   run the following command when conda is activated:<br><br>conda config --set auto_activate_base false<br><br>You can undo this by running `conda init --reverse <span class="hljs-variable">$SHELL</span>`? [yes|no]<br></code></pre></td></tr></table></figure>
+<p>根据自己需要选择即可</p>
+<h4 id="创建环境">创建环境</h4>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">conda <span class="hljs-built_in">create</span> <span class="hljs-comment">--name rl python=填python版本号</span><br></code></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">Downloading and Extracting Packages:</span><br><br><span class="hljs-attr">Preparing transaction:</span> <span class="hljs-string">done</span><br><span class="hljs-attr">Verifying transaction:</span> <span class="hljs-string">done</span><br><span class="hljs-attr">Executing transaction:</span> <span class="hljs-string">done</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment"># To activate this environment, use</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#     $ conda activate rl</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment"># To deactivate an active environment, use</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#     $ conda deactivate</span><br></code></pre></td></tr></table></figure>
+<p>运行下列命令行，检查自己环境是否创建成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">conda <span class="hljs-built_in">env</span> list<br></code></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment"># conda environments:</span><br><span class="hljs-comment">#</span><br>base                  *  <span class="hljs-regexp">/xxxx/</span>anaconda3<br>rl                       <span class="hljs-regexp">/xxxx/</span>anaconda3<span class="hljs-regexp">/envs/</span>rl<br></code></pre></td></tr></table></figure>
+<h4 id="查看创建成功的环境">查看创建成功的环境</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">conda <span class="hljs-built_in">env</span> list<br></code></pre></td></tr></table></figure>
+<h4 id="激活指定的环境">激活指定的环境</h4>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-built_in">activate</span> rl<br></code></pre></td></tr></table></figure>
+<h4 id="退出创建的环境">退出创建的环境</h4>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">conda deactivate</span><br></code></pre></td></tr></table></figure>
 <h4
-id="线性连续时不变系统的能控性判据">2.1、线性连续时不变系统的能控性判据</h4>
-<h5 id="秩判据">(1)秩判据（*）</h5>
-<p>a、秩判据</p>
-<p>对于线性定常系统 <span class="math display">\[
-\begin{aligned}\dot{x}(t)&amp;=Ax(t)+Bu(t),X(0)=X_0,t\geq0\end{aligned}
-\]</span> 其完全能控的<strong>充分必要条件</strong>是 <span
-class="math display">\[
-\begin{aligned}rankQ_c&amp;=rank[B \ AB \ \cdots \
-A^{n-1}B]\\&amp;=n\end{aligned}
-\]</span> 其中<span class="math inline">\(n\)</span>是矩阵<span
-class="math inline">\(A\)</span>的维数，<span
-class="math inline">\(Q_c\)</span>是系统的能控性判别阵</p>
-<p>b、改进的能控性秩判据</p>
-<p>（适用于多输入系统，可减少计算）</p>
-<p>对于线性定常系统:</p>
-<p><span class="math inline">\(\dot{x}\)</span>是<span
-class="math inline">\(n\)</span>维状态向量，<span
-class="math inline">\(u\)</span>是<span
-class="math inline">\(p\)</span>维输入向量 <span class="math display">\[
-\begin{aligned}\dot{x}(t)&amp;=Ax(t)+Bu(t),X(0)=X_0,t\geq0\end{aligned}
-\]</span> 其完全能控的<strong>充分必要条件</strong>是: <span
-class="math display">\[
-rankQ_{n-r+1}=rank[B \ AB \ \cdots \ A^{n-r}B]=n\\
-r=rankB,r\leq p\\
-\]</span></p>
-<h5 id="phb秩判据">(2)PHB秩判据（*）</h5>
-<p>对于线性定常系统:</p>
-<p><span class="math inline">\(\dot{x}\)</span>是<span
-class="math inline">\(n\)</span>维状态向量，<span
-class="math inline">\(u\)</span>是<span
-class="math inline">\(p\)</span>维输入向量 <span class="math display">\[
-\begin{aligned}\dot{x}(t)&amp;=Ax(t)+Bu(t),X(0)=X_0,t\geq0\end{aligned}
-\]</span> 其完全能控的<strong>充分必要条件</strong>是: <span
-class="math display">\[
-\lambda_{i}(i=1,2,\ldots,n)\\rank[\lambda_{i}I-A \ \
-\  B]=n,i=1,\ldots,n
-\]</span> 其中<span
-class="math inline">\(\lambda_i\)</span>代表矩阵<span
-class="math inline">\(A\)</span>的所有特征值</p>
-<p>或等价地表示为： <span class="math display">\[
-\\rank[SI-A \ \ \ B]=n,\forall s\in C
-\]</span> 其中<span class="math inline">\(C\)</span>代表复数集</p>
-<h5 id="对角线规范判据">(3)对角线规范判据（*）</h5>
-<p>对于线性定常系统:</p>
-<p><span class="math inline">\(\dot{x}\)</span>是<span
-class="math inline">\(n\)</span>维状态向量，<span
-class="math inline">\(u\)</span>是<span
-class="math inline">\(p\)</span>维输入向量 <span class="math display">\[
-\begin{aligned}\dot{x}(t)&amp;=Ax(t)+Bu(t),X(0)=X_0,t\geq0\end{aligned}
-\]</span> 当<strong>矩阵<span
-class="math inline">\(A\)</span>的特征值<span
-class="math inline">\(\lambda_1、\lambda_2、\dots
-、\lambda_n\)</span>两两相异</strong>时，</p>
-<p>其完全能控的<strong>充分必要条件</strong>是:</p>
-<p>该系统的对角规范型中<span
-class="math inline">\(\overline{B}\)</span>不包含元素为零的行 <span
-class="math display">\[
-\dot{x}=
-\begin{bmatrix}
-    \lambda_{1} &amp; 0 &amp; \dots &amp; 0 \\
-    0 &amp; \lambda_{2} &amp; \dots &amp; 0 \\
-    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
-    0 &amp; 0 &amp; \dots &amp; \lambda_{n}
-\end{bmatrix}\overline{x} + \overline{B}{u}
-\]</span></p>
-<h5 id="约当规范型判据">(4)约当规范型判据</h5>
-<p>对于线性定常系统:</p>
-<p><span class="math inline">\(\dot{x}\)</span>是<span
-class="math inline">\(n\)</span>维状态向量，<span
-class="math inline">\(u\)</span>是<span
-class="math inline">\(p\)</span>维输入向量 <span class="math display">\[
-\begin{aligned}\dot{x}(t)&amp;=Ax(t)+Bu(t),X(0)=X_0,t\geq0\end{aligned}
-\]</span> 当矩阵<span
-class="math inline">\(A\)</span><strong>有重特征值</strong>时，</p>
-<p>其完全能控的<strong>充分必要条件</strong>是:</p>
-<p>由该系统推导出的约当规范型<span
-class="math inline">\(\dot{\hat{x}}=\dot{A}\hat{x(t)}+\hat{B}u\)</span>中，<span
-class="math inline">\(\hat{B}\)</span>中与同一特征值的各约当小块对应的各子块的最后一行组成的矩阵是<strong>行线性无关的</strong>。</p>
-<h4 id="能控性指数">2.2 能控性指数</h4>
-<h3 id="对偶性">4、对偶性</h3>
-<h3
-id="连续时间线性时不变系统的结构分解">6、连续时间线性时不变系统的结构分解</h3>
-<h4 id="结构分解解释">(1)结构分解解释：</h4>
-将连续时间线性时不变系统按能控性分解，可分解为: <span
-class="math display">\[
-\left\{\begin{array}{ccc}        
-&amp; x_e \ (能控子系统)\\         
-&amp; x_{\overline{e}} \ (不能控子系统)
-\end{array} \right.
-\]</span> 将连续时间线性时不变系统按能观测性分解，可分解为: <span
-class="math display">\[
-\left\{\begin{array}{ccc}        
-&amp; x_o \ (能观测子系统)\\         
-&amp; x_{\overline{o}} \ (不能观测子系统)
-\end{array} \right.
-\]</span> 将连续时间线性时不变系统按能控性、能观测性分解，可分解为: $$ {
-<span class="math display">\[\begin{array}{ccc}        
-&amp; x_c \ (能控子系统)
-\{\begin{array}{ccc}        
-&amp; x_{co} \ (能控能观测子系统)\\         
-&amp; x_{c \overline{o}} \ (能控不能观测子系统)
-\end{array}\\  
-
-&amp; x_{\overline{c}} \ (不能控子系统)
-\{\begin{array}{ccc}   
-&amp; x_{\overline{c}o} \ (不能控能观测系统)\\         
-&amp; x_{\overline{c} \overline{o}} \ (不能控不能观测子系统)
-\end{array}
-\end{array}\]</span>
-<p>. $$</p>
-<h4
-id="线性定常系统按能控性的结构分解">(2)线性定常系统按能控性的结构分解（*）</h4>
-<h5
-id="系统按能控性的结构分解的规范表达式">1)系统按能控性的结构分解的规范表达式</h5>
-对于不完全能控系统，<span
-class="math inline">\(rank(Q_k)=k&gt;n\)</span>，引入线性非奇异变化<span
-class="math inline">\(\overline{x}=Px\)</span>，系统按能控性的结构分解的规范表达式为(将<span
-class="math inline">\(\overline{x}=Px\)</span>代入原状态空间方程化简)：
-$$ {
-<span class="math display">\[\begin{array}{ccc}        
-\begin{bmatrix}
-    \dot{\overline{x_c}} \\
-    \dot{\overline{x_{\overline{c}}}}
-\end{bmatrix}
-
-=
-
-\begin{bmatrix}
-    \overline{A_c} &amp;  \overline{A_{12}} \\
-     0             &amp;  \overline{A_{\overline{c}}}
-\end{bmatrix}
-\begin{bmatrix}
-    {\overline{x_c}} \\
-    {\overline{x_{\overline{c}}}}
-\end{bmatrix}
-
-+
-
-\begin{bmatrix}
-    {\overline{B_c}} \\
-    0
-\end{bmatrix}
-u\\
-
-y=\begin{bmatrix}
-    \overline{C_C}  &amp; \overline{C_{\overline{c}}}
-\end{bmatrix}
-\begin{bmatrix}
-    {\overline{x_c}} \\
-    {\overline{x_{\overline{c}}}}
-\end{bmatrix}
-\end{array}\]</span>
-<p>. $$ 其中，<span class="math inline">\(\overline{x_c}\)</span>是<span
-class="math inline">\(k\)</span>维能控分状态，<span
-class="math inline">\(\overline{x_{\overline{c}}}\)</span>是<span
-class="math inline">\((n-k)\)</span>维不能控分状态</p>
-<p>有： $$ <span class="math display">\[\begin{equation}
-\begin{split}
-\begin{bmatrix}
-    {\overline{x}_c} \\
-    {\overline{x}_{\overline{c}}}
-\end{bmatrix}
-
-=
-
-\overline{x}=Px\\
-
-\overline{A}=PAP^{-1}=
-\begin{bmatrix}
-    \overline{A}_c &amp;  \overline{A}_{12} \\
-     0             &amp;  \overline{A}_{\overline{c}}
-\end{bmatrix} \\
-
-\overline{B}=PB=\begin{bmatrix}
-    {\overline{B}_c} \\
-    0
-\end{bmatrix} \\
-
-\overline{C}=CP^{-1}=\begin{bmatrix}
-    {\overline{C}_c} &amp; {\overline{C}_\overline{c}}
-\end{bmatrix}
-\end{split}
-\end{equation}\]</span> $$</p>
-<h6 id="非奇异变换矩阵p-1的构造方法">非奇异变换矩阵<span
-class="math inline">\(P^{-1}\)</span>的构造方法</h6>
-<ul>
-<li><p>从能控性判别阵<span
-class="math inline">\(Q_c\)</span>里任意选取<span
-class="math inline">\(k\)</span>个线性无关的列向量，记为<span
-class="math inline">\(q_1、q_2、······,q_k\)</span></p></li>
-<li><p>从n维实数空间中任意选取尽可能简单的<span
-class="math inline">\((n-k)\)</span>个列向量，记为<span
-class="math inline">\(q_{k+1}、q_{k+2}、······,q_n\)</span>，使它们和<span
-class="math inline">\(q_1、q_2、······,q_k\)</span>线性无关</p></li>
-<li><p><span class="math display">\[
-P^{-1} = \begin{bmatrix}
-    q_1 &amp; q_2 &amp; ······ &amp; q_k &amp; q_{k+1} &amp; q_{k+2}
-&amp; ······ &amp; q_n
-\end{bmatrix}
-\]</span></p></li>
-</ul>
-<h5 id="系统结构能控性分解特点">2)系统结构能控性分解特点</h5>
-<p>a、<span
-class="math inline">\(n\)</span>维不完全能控系统与其能控子系统具有相同的传递函数矩阵
-<span class="math display">\[
-\begin{equation}
-\begin{split}
-G(s) &amp; = C(sI-A)^{-1}B\\
-&amp;=\overline{C}(sI-\overline{A})^{-1}\overline{B}\\
-&amp;=\overline{C}_c(sI_{k}-\overline{A}_c)^{-1}\overline{B}_c
-\end{split}
-\end{equation}
-\]</span> 且有： <span class="math display">\[
-\begin{equation}
-\begin{split}
-rank\begin{bmatrix}
-    B &amp; AB  &amp;···&amp; A^{n-1}B
-\end{bmatrix} &amp;=
-rank\begin{bmatrix}
-    \overline{B}_c &amp; \overline{A}_c\overline{B}_c  &amp;···&amp;
-\overline{A}_{c}^{n-1}\overline{B}_c
-\end{bmatrix}\\
-&amp;=k
-\end{split}
-\end{equation}
-\]</span> 当从传递特性来分析系统使，可以等价地分析其能控子系统。</p>
-<p>b、由于<span
-class="math inline">\(\overline{A}_\overline{c}\)</span>分别会影响能控子系统状态响应<span
-class="math inline">\(x_c(t)\)</span>，<span
-class="math inline">\(\overline{C}_\overline{c}\)</span>会影响系统输出响应<span
-class="math inline">\(y(t)\)</span>，故要求<span
-class="math inline">\(\overline{A}_\overline{c}\)</span>的所有特征值都必须是稳定的（即所有特征值都具有负实部）</p>
-<p>c、系统的特征多项式分解 <span class="math display">\[
-\begin{equation}
-\begin{split}
-det(sI-A) &amp;= det(sI-\overline{A})\\
-          &amp;=
-det\begin{bmatrix}
-   sI-\overline{A}_c &amp; -\overline{A}_{12}\\
-   0                 &amp; sI-\overline{A}_{\overline{c}}
-\end{bmatrix}\\
-&amp;=det(sI-\overline{A}_c)·det(sI-\overline{A}_{\overline{c}})
-\end{split}
-\end{equation}
-\]</span> 将<span
-class="math inline">\(det(sI-\overline{A}_c)\)</span>称为能控振型、<span
-class="math inline">\(det(sI-\overline{A}_{\overline{c}})\)</span>称为不能控振型；外部输入<span
-class="math inline">\(u\)</span>只能改变能控振型。</p>
-<p>d、构造<span
-class="math inline">\(P^{-1}\)</span>矩阵时，列向量选取不唯一，故能控性分解结果不唯一</p>
+id="删除所创建的环境rl--all完全删除">删除所创建的环境rl（--all，完全删除）</h4>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-comment">conda remove</span> <span class="hljs-literal">--</span><span class="hljs-comment">name rl</span> <span class="hljs-literal">--</span><span class="hljs-comment">all</span><br></code></pre></td></tr></table></figure>
+<h3 id="pytorch安装">1.2 PyTorch安装</h3>
+<p>官网：<a target="_blank" rel="noopener" href="https://pytorch.org/">PyTorch</a></p>
+<figure>
+<img src="./assets/image-20240428182007432.png" srcset="/img/loading.gif" lazyload
+alt="image-20240428182007432" />
+<figcaption aria-hidden="true">image-20240428182007432</figcaption>
+</figure>
+<p>点击进入Get Started界面，按需要选择配置之后，将"Run this
+Command"的命令复制到命令行里。</p>
+<h3 id="jupyter-notebook的安装">1.3 Jupyter Notebook的安装</h3>
+<p>终端使用命令行</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">pip <span class="hljs-keyword">install </span><span class="hljs-keyword">jupyter </span>notebook<br></code></pre></td></tr></table></figure>
+<p>安装完成之后打开Jupyter Notebook</p>
+<p>命令行输入：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">jupyter notebook</span><br></code></pre></td></tr></table></figure>
+<p>复制终端里的相应链接到浏览器打开</p>
+<figure>
+<img src="./assets/image-20240512133610159.png" srcset="/img/loading.gif" lazyload
+alt="image-20240512133610159" />
+<figcaption aria-hidden="true">image-20240512133610159</figcaption>
+</figure>
+<p><img src="./assets/image-20240512133954633.png" srcset="/img/loading.gif" lazyload
+alt="image-20240512133954633" /><img
+src="./assets/image-20240512134056096.png" srcset="/img/loading.gif" lazyload
+alt="image-20240512134056096" /></p>
+<h3 id="gym">1.4 GYM</h3>
+<p>github源码网址：[GitHub - openai/gym: A toolkit for developing and
+comparing reinforcement learning algorithms.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/openai/gym"></a></p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">http</span>://github.com/openai/gym.git<br></code></pre></td></tr></table></figure>
+<p>注释掉setup.py里的</p>
+<figure>
+<img src="./assets/image-20240512145155947.png" srcset="/img/loading.gif" lazyload
+alt="image-20240512145155947" />
+<figcaption aria-hidden="true">image-20240512145155947</figcaption>
+</figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> gym<br>pip install -e <span class="hljs-string">&#x27;.[all]&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>出现报错</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs awk">× python setup.py bdist_wheel did not run successfully.<br>  │ <span class="hljs-keyword">exit</span> code: <span class="hljs-number">1</span><br>  ╰─&gt; [<span class="hljs-number">17</span> lines of output]<br>      Using setuptools (version <span class="hljs-number">45.2</span>.<span class="hljs-number">0</span>).<br>      running bdist_wheel<br>      running build<br>      running build_py<br>      creating build<br>      creating build/lib.linux-x86_64-<span class="hljs-number">3.8</span><br>      creating build<span class="hljs-regexp">/lib.linux-x86_64-3.8/</span>Box2D<br>      copying library<span class="hljs-regexp">/Box2D/</span>Box2D.py -&gt; build<span class="hljs-regexp">/lib.linux-x86_64-3.8/</span>Box2D<br>      copying library<span class="hljs-regexp">/Box2D/</span>__init__.py -&gt; build<span class="hljs-regexp">/lib.linux-x86_64-3.8/</span>Box2D<br>      creating build<span class="hljs-regexp">/lib.linux-x86_64-3.8/</span>Box2D/b2<br>      copying library<span class="hljs-regexp">/Box2D/</span>b2<span class="hljs-regexp">/__init__.py -&gt; build/</span>lib.linux-x86_64-<span class="hljs-number">3.8</span><span class="hljs-regexp">/Box2D/</span>b2<br>      running build_ext<br>      building <span class="hljs-string">&#x27;Box2D._Box2D&#x27;</span> extension<br>      swigging Box2D<span class="hljs-regexp">/Box2D.i to Box2D/</span>Box2D_wrap.cpp<br>      swig -python -c++ -IBox2D -small -O -includeall -ignoremissing -w201 -globals b2Globals -outdir library<span class="hljs-regexp">/Box2D -keyword -w511 -D_SWIG_KWARGS -o Box2D/</span>Box2D_wrap.cpp Box2D/Box2D.i<br>      unable to execute <span class="hljs-string">&#x27;swig&#x27;</span>: No such file or directory<br>      error: command <span class="hljs-string">&#x27;swig&#x27;</span> failed with <span class="hljs-keyword">exit</span> status <span class="hljs-number">1</span><br>      [end of output]<br><br>  note: This error originates from a subprocess, and is likely not a problem with pip.<br>  ERROR: Failed building wheel <span class="hljs-keyword">for</span> box2d-py<br>  Running setup.py clean <span class="hljs-keyword">for</span> box2d-py<br>  Building wheel <span class="hljs-keyword">for</span> moviepy (setup.py) ... done<br>  Created wheel <span class="hljs-keyword">for</span> moviepy: filename=moviepy-<span class="hljs-number">1.0</span>.<span class="hljs-number">3</span>-py3-none-any.whl size=<span class="hljs-number">110730</span> sha256=dff0c45a7ab8b9f1a6aa63deda2acd8f111892411080fbb8d039ced27cb2fe20<br>  Stored <span class="hljs-keyword">in</span> directory: <br></code></pre></td></tr></table></figure>
+<p>原因是没有下载SWIG</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake">sudo apt update<br>sudo apt <span class="hljs-keyword">install</span> swig<br></code></pre></td></tr></table></figure>
+<p>检查是否安装成功</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">swig -<span class="hljs-built_in">version</span><br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -553,15 +370,8 @@ class="math inline">\(P^{-1}\)</span>矩阵时，列向量选取不唯一，故�
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/" class="category-chain-item">控制理论</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/%E7%8E%B0%E4%BB%A3%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">现代控制理论学习笔记</a>
-  
-  
-
   
 
       </span>
@@ -575,11 +385,7 @@ class="math inline">\(P^{-1}\)</span>矩阵时，列向量选取不唯一，故�
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%8E%B0%E4%BB%A3%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/" class="print-no-link">#现代控制理论</a>
-      
-        <a href="/tags/%E8%83%BD%E6%8E%A7%E6%80%A7/" class="print-no-link">#能控性</a>
-      
-        <a href="/tags/%E8%83%BD%E8%A7%82%E6%80%A7/" class="print-no-link">#能观性</a>
+        <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="print-no-link">#强化学习环境配置</a>
       
     </div>
   
@@ -591,8 +397,8 @@ class="math inline">\(P^{-1}\)</span>矩阵时，列向量选取不唯一，故�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>线性系统的能控性和能观测性</div>
-      <div>http://example.com/2024/05/17/现控第四章/</div>
+      <div>Linux下配置强化学习环境</div>
+      <div>http://example.com/2024/05/17/强化学习配置环境/</div>
     </div>
     <div class="license-meta">
       
@@ -636,9 +442,9 @@ class="math inline">\(P^{-1}\)</span>矩阵时，列向量选取不唯一，故�
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/05/17/%E7%8A%B6%E6%80%81%E5%8F%8D%E9%A6%88%E5%92%8C%E6%9E%81%E7%82%B9%E9%85%8D%E7%BD%AE%E6%80%BB%E7%BB%93/" title="状态反馈和极点配置知识点总结">
+                      <a href="/2024/05/17/LQR%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC%E4%BB%A5%E5%8F%8A%E5%BA%94%E7%94%A8/" title="以倒立摆为例，学习设计LQR控制器">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">状态反馈和极点配置知识点总结</span>
+                        <span class="hidden-mobile">以倒立摆为例，学习设计LQR控制器</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -646,8 +452,8 @@ class="math inline">\(P^{-1}\)</span>矩阵时，列向量选取不唯一，故�
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/05/17/%E7%AC%AC%E4%BA%94%E7%AB%A0%E6%80%BB%E7%BB%93/" title="微机原理汇编语言程序设计基础知识点总结">
-                        <span class="hidden-mobile">微机原理汇编语言程序设计基础知识点总结</span>
+                      <a href="/2024/05/17/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5/" title="坐标变换旋转矩阵、四元数反解欧拉角公式推导">
+                        <span class="hidden-mobile">坐标变换旋转矩阵、四元数反解欧拉角公式推导</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

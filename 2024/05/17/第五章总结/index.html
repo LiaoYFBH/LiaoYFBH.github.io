@@ -1,0 +1,1098 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本文为对微机原理汇编语言部分的知识点总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微机原理汇编语言程序设计基础知识点总结">
+<meta property="og:url" content="http://example.com/2024/05/17/%E7%AC%AC%E4%BA%94%E7%AB%A0%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文为对微机原理汇编语言部分的知识点总结">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/assets/%E5%B0%81%E9%9D%A22.png">
+<meta property="article:published_time" content="2024-05-17T04:08:07.000Z">
+<meta property="article:modified_time" content="2024-05-17T10:14:16.232Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="汇编语言，微机原理">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/assets/%E5%B0%81%E9%9D%A22.png">
+  
+  
+  
+  <title>微机原理汇编语言程序设计基础知识点总结 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>yf-personal-homepage</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="微机原理汇编语言程序设计基础知识点总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-17 12:08" pubdate>
+          May 17, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">微机原理汇编语言程序设计基础知识点总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文为对微机原理汇编语言部分的知识点总结 <span id="more"></span></p>
+<h2 id="汇编语言概述">1、汇编语言概述</h2>
+<h3 id="汇编语言的三种语句">1.1 汇编语言的三种语句</h3>
+<table>
+<thead>
+<tr class="header">
+<th>汇编语言的三种语句</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>指令语句</td>
+<td>可以翻译成机器码</td>
+</tr>
+<tr class="even">
+<td>伪指令语句</td>
+<td>指示、引导汇编程序在汇编过程中完成某些操作</td>
+</tr>
+<tr class="odd">
+<td>宏指令语句</td>
+<td>若干条指令语句可用一条宏指令语句代替</td>
+</tr>
+</tbody>
+</table>
+<h3 id="汇编语句的格式">1.2 汇编语句的格式</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">[名字项]   操作码项   [操作数项]   ;注释项<br></code></pre></td></tr></table></figure>
+<p>各项字段介绍：</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>字段</th>
+<th>是否可舍(带[]可根据需要舍去)</th>
+<th>含义</th>
+<th>写法的注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>[名字项]</td>
+<td>可</td>
+<td>一个符号，可以是变量、标号、符号常数、段名、子程序名等</td>
+<td>可大写字母、小写字母、阿拉伯数字、特殊符号，但是<strong>第一个符号必须是字母</strong></td>
+</tr>
+<tr class="even">
+<td>操作码项</td>
+<td>不可</td>
+<td>各类指令的助记符，表明要执行的操作</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>[操作数项]</td>
+<td>可</td>
+<td>对伪指令和宏指令：给出参数。<br />对指令语句：给出常数、寄存器、标号、变量、表达式、类型说明符等等。</td>
+<td>可由一项或多项组成，多个操作数之间用“,”间隔</td>
+</tr>
+<tr class="even">
+<td>[;注释项]</td>
+<td>可</td>
+<td>用于说明</td>
+<td>一定要用";"隔开</td>
+</tr>
+</tbody>
+</table>
+<h2 id="伪指令语句">2、伪指令语句</h2>
+<p>伪指令语句简介：</p>
+<p>​ 本身不产生相应的机器码，但会指示编译器如何编译</p>
+<h3 id="数据定义语句">2.1 数据定义语句</h3>
+<h4 id="数据定义语句格式">(1)数据定义语句格式</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">[变量]     助记符   参数表  ;注释<br></code></pre></td></tr></table></figure>
+<h4 id="变量的属性">(2)变量的属性</h4>
+<table>
+
+<thead>
+<tr class="header">
+<th>变量的属性</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>偏移属性</td>
+<td>其偏移地址为16位无符号数，代表从起始地址(0000H)到变量的位置之间的字节数</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>段属性</td>
+<td>代表变量所表示的偏移地址在哪个段，一般在数据段，若在其它段，可用段前缀或者段定义语句来指明</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>类型属性</td>
+<td>代表该语句中每一个参数的长度（单位:字节）</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="数据定义语句中的助记符">(3)数据定义语句中的助记符</h4>
+<table>
+
+<thead>
+<tr class="header">
+<th>数据定义语句中的助记符</th>
+<th>功能</th>
+<th>解释</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DB</td>
+<td>定义字节(Byte)</td>
+<td>代表其后每个操作数都占1Byte</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>DW</td>
+<td>定义字</td>
+<td>代表其后每个操作数都占1个字，1个字的低8位存在第1个Byte的低地址中，字的高8位存在第2个Byte的高地址中</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>DD</td>
+<td>定义双字</td>
+<td>代表其后每个操作数都占两个字</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>DQ</td>
+<td>定义4字</td>
+<td>代表其后每个操作数都占4个字</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>DT</td>
+<td>定义5字</td>
+<td>代表其后每个操作数都占5个字</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="参数表">(4)参数表</h4>
+<p>书写注意：多个参数之间用","隔开，存入存储单元之后，为了便于阅读，在画示意图的时候都应该写成16进制（补码）</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>参数的类型</th>
+<th>解释</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>常数或表达式</td>
+<td>汇编时，汇编程序将这些参数的数据存放到相应存储单元</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>字符串</td>
+<td>字符汇编后应用ASCII码表示，注意区分DB和DW两种定义方式（用DW定义时，写在前8位的是数据的高字节，应该在高地址）</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>预留空单元</td>
+<td>写法：用“?”表示</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>复制操作符DUP</td>
+<td>写法： 数量 DUP(要复制的内容)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>偏移地址(标号、变量)</td>
+<td>将标号或者变量的<strong>偏移地址</strong>装入对应的存储单元</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="符号定义语句等值语句">2.2 符号定义语句(等值语句)</h3>
+<p>符号：汇编语言中所有的变量名、标号名、子程序名、助记符</p>
+<h4 id="符号定义语句的格式">(1)符号定义语句的格式</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">符号名   EQU   表达式   ;注释<br></code></pre></td></tr></table></figure>
+<h4 id="符号定义语句的作用">(2)符号定义语句的作用</h4>
+<table>
+
+<thead>
+<tr class="header">
+<th>可用于下列情况（EQU语句不占用内存单元）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>为常量或表达式定义一个符号名，定义后，涉及该常量或表达式的地方均可用此符号名代替</td>
+</tr>
+<tr class="even">
+<td>给变量或标量定义一个新的类型名并起一个新名</td>
+</tr>
+<tr class="odd">
+<td>给地址表达式指出的任意存储单元定义一个名字</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>与“=”指令的区别</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>EQU伪指令中的符号名在同一程序中不允许重复定义</td>
+</tr>
+<tr class="even">
+<td>“=”伪指令允许符号重复定义</td>
+</tr>
+</tbody>
+</table>
+<h3 id="段定义语句">2.2 段定义语句</h3>
+<p>一共三类，分别是分段伪指令、设定伪指令、开始伪指令</p>
+<h4 id="分段伪指令">(1)分段伪指令</h4>
+<h5 id="a-分段伪指令格式">a 分段伪指令格式：</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs assembly">段名   SEGMENT   [定位类型]  [组合类型]  [‘类别’]<br><br>······<br><br>··· (汇编语句)<br><br>······<br><br>段名   ENDS<br></code></pre></td></tr></table></figure>
+<h5 id="b-分段伪指令格式的解释和注意事项">b
+分段伪指令格式的解释和注意事项</h5>
+<table>
+
+<thead>
+<tr class="header">
+<th>对应部分</th>
+<th>是否可省略</th>
+<th>解释和注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>段名</td>
+<td>不可省略</td>
+<td>同一段的段名要一致</td>
+</tr>
+<tr class="even">
+<td>SEGMENT、ENDS</td>
+<td>不可省略，要成对出现</td>
+<td>其中间是段体，由汇编语句组成</td>
+</tr>
+<tr class="odd">
+<td>[定位类型]</td>
+<td>可选</td>
+<td>有四种类型（若省略了该项，则隐含为PARA）：<br />PARA：<br />(1)指定段的起始地址必须从小段边界开始；<br />(2)地址的最低4位必须是0。<br />BYTE：<br />指定段的起始地址可以从任何地址开始。<br />WORD：<br />(1)指定段的起始地址从字的边界开始；<br />(2)段地址必须是偶数；<br />(3)地址的最低位必为0<br />PAGE：<br />(1)指定段的起始地址从页的边界开始；<br />(2)地址的最低8位必须是0</td>
+</tr>
+<tr class="even">
+<td>[组合类型]</td>
+<td>可选</td>
+<td>一共6种(若省略该项，则隐含为NONE)<br />NONE：<br />表示该段在连接时与其它段在逻辑上不发生任何关系。<br />PUBLIC:<br />表示该段与其他段中用PUBLIC说明的同名同类型的段连接成一个逻辑段<br />STACK：<br />表示连接时将具有STACK类型的同名段连接成一个大堆栈，由各模块共享<br />COMMON：<br />表示连接时与其他同名段有相同的起始地址，连接长度是各段中最大长度<br />MEMORY：<br />表示该段在连接时，被放在所有段的最后(高地址段)<br />AT
+表达式：<br />表达式计算出来的16位值为该段的起始地址</td>
+</tr>
+<tr class="odd">
+<td>['类别']</td>
+<td>可选</td>
+<td>单引号括起来的字符串，表示该段的类别，在连接时只与同类别的段发生关联</td>
+</tr>
+</tbody>
+</table>
+<h4 id="设定伪指令">(2)设定伪指令</h4>
+<h5 id="a-设定伪指令格式">a 设定伪指令格式</h5>
+<p>一般在代码段的最前面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">ASSUME   段寄存器:段名,段寄存器:段名······<br></code></pre></td></tr></table></figure>
+<h5 id="b-设定伪指令功能">b 设定伪指令功能</h5>
+<p>规定段属性，即指出段寄存器CS、DS、ES、SS被设定为内存中哪一段的段寄存器</p>
+<h5 id="c-注意事项">c 注意事项</h5>
+<p>使用之后，还需使用MOV指令为DS、ES、SS段寄存器赋值(CS段寄存器不能赋值，因为它是系统初始化时自动设置的)</p>
+<p>例如：假设DATA是一个数据段的段名，为DS寄存器赋值的代码示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AX,DATA<br>MOV DX,AX<br></code></pre></td></tr></table></figure>
+<h4 id="开始伪指令">（3）开始伪指令</h4>
+<h5 id="a-开始伪指令的格式">a 开始伪指令的格式</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">ORG   表达式<br></code></pre></td></tr></table></figure>
+<h5 id="b-开始伪指令的格式">b 开始伪指令的格式</h5>
+<p>用于指出其后的程序段或数据段存放起始数据的偏移地址</p>
+<h4 id="符号">(4)符号$</h4>
+<p>表示地址计数器的当前值</p>
+<h3 id="过程定义语句">2.4 过程定义语句</h3>
+<p>过程也称子程序，过程被定义后可以用CALL指令调用</p>
+<h4 id="过程定义语句的格式">(1)过程定义语句的格式</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">过程名   PROC   类型<br>         ···<br>         ···<br>         RET<br>过程名   ENDP<br></code></pre></td></tr></table></figure>
+<h4 id="过程类型介绍">(2)过程类型介绍</h4>
+<table>
+
+<thead>
+<tr class="header">
+<th>类型属性</th>
+<th>作用</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NEAR</td>
+<td>指出过程是段内调用</td>
+<td>若不指定属性，默认为NEAR</td>
+</tr>
+<tr class="even">
+<td>FAR</td>
+<td>指出过程是段间调用</td>
+<td>过程被定义为FAR，必须使用段间调用指令</td>
+</tr>
+</tbody>
+</table>
+<h3 id="程序开始结束语句">2.5 程序开始、结束语句</h3>
+<h4 id="程序开始语句">(1)程序开始语句</h4>
+<h5 id="a-在程序的开始用name命名">a 在程序的开始用NAME命名</h5>
+<p>汇编程序用模块名作为程序名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">NAME   模块名<br></code></pre></td></tr></table></figure>
+<h5 id="b-在程序的开始用title命名">b 在程序的开始用TITLE命名</h5>
+<p>汇编程序用标题的前6个字符作为程序名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">TITLE   标题<br></code></pre></td></tr></table></figure>
+<h5 id="c-汇编程序也允许源程序不用name或title命名">c
+汇编程序也允许源程序不用NAME或TITLE命名</h5>
+<h4 id="程序结束语句">(2) 程序结束语句</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">END   标号(源程序中第一条指令语句前的标号)<br></code></pre></td></tr></table></figure>
+<h2 id="指令语句">3、指令语句</h2>
+<h3 id="指令语句格式">3.1 指令语句格式</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">[标号:]   指令助记符   [操作数]   ;注释<br></code></pre></td></tr></table></figure>
+<p>带[]的和注释是任选项，若写了标号，那其后的":"不可省略！</p>
+<h3 id="指令语句的标号">3.2 指令语句的标号</h3>
+<p>标号是给某条指令起的名字</p>
+<h4 id="属性">(1)属性</h4>
+<table>
+
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>段属性</td>
+<td>定义标号所在段的段地址，标号所在段的段地址只能在CS寄存器中</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>偏移属性</td>
+<td>是一个16位无符号数，代表从起始地址到标号位置间的字节数</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>类型属性</td>
+<td>NEAR属性：转移或调用指令与标号所指语句或过程在同一代码段内，转移或调用时只需改变IP值，不改变CS值<br />FAR属性：转移或调用指令与标号所指语句或过程不在同一代码段内；转移或调用时，IP值、CS值都改变</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="标号的使用">(2) 标号的使用</h4>
+<table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>使用情况</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>无条件转移指令、调用指令</td>
+<td>段间转移或调用：使用FAR<br />段内转移或调用：使用NEAR（指令距离在-32768<sub>+32767之间都可），或者是FAR<br />段内短转移：在指令的标号前加SHORT（指令距离在-128</sub>+127之间）</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>条件转移指令或循环转移指令</td>
+<td>只能SHORT(可省略)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="汇编语言程序设计">4、汇编语言程序设计</h2>
+<h3 id="dos功能及调用">4.5 DOS功能及调用</h3>
+<h4 id="常用的dos系统功能调用">常用的DOS系统功能调用</h4>
+<h5 id="ch终止程序返回dos">(1) 4CH——终止程序，返回DOS</h5>
+<p>程序段如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AH,4CH<br>INT 21H<br></code></pre></td></tr></table></figure>
+<h5 id="h读取键盘字符使回显">(2) 01H——读取键盘字符使回显</h5>
+<p>程序段如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AH,01H<br>INT 21H<br></code></pre></td></tr></table></figure>
+<p>扫描键盘，等待按键。</p>
+<p>将按键对应的ASCII码送入AL寄存器，同时显示器显示该字符。</p>
+<h5 id="h控制台输入但不回显">(3) 07H——控制台输入但不回显</h5>
+<p>程序段如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AH,07H<br>INT 21H<br></code></pre></td></tr></table></figure>
+<h5 id="ah字符串输入">(4) 0AH——字符串输入</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AH,0AH<br>···DS:DX&lt;-从键盘接收字符的输入缓冲区首址···<br>INT 21H<br></code></pre></td></tr></table></figure>
+<h5 id="h显示器显示字符">(5)02H——显示器显示字符</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AH,02H<br>MOV DL,要显示字符的ASCII码<br>INT 21H<br></code></pre></td></tr></table></figure>
+<h5 id="h打印机打印字符">(6)05H——打印机打印字符</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AH,05H<br>MOV DL,要显示字符的ASCII码<br>INT 21H<br></code></pre></td></tr></table></figure>
+<h5 id="h显示器显示字符串">(7)09H——显示器显示字符串</h5>
+<p>该字符串必须在数据段内，且以'$'为结束标志</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">MOV AH,09H<br>MOV DX,要显示字符串的首地址<br>INT 21H<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9B%B8%E5%85%B3/" class="category-chain-item">计算机相关</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%8C%E5%BE%AE%E6%9C%BA%E5%8E%9F%E7%90%86/" class="print-no-link">#汇编语言，微机原理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>微机原理汇编语言程序设计基础知识点总结</div>
+      <div>http://example.com/2024/05/17/第五章总结/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 17, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/17/%E7%8E%B0%E6%8E%A7%E7%AC%AC%E5%9B%9B%E7%AB%A0/" title="线性系统的能控性和能观测性">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">线性系统的能控性和能观测性</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/17/hello-world/" title="Hello World">
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

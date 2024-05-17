@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/assets/%E4%B8%89%E7%BB%B4%E6%97%8B%E8%BD%AC_%E5%AE%8C%E6%95%B4.png">
 <meta property="article:published_time" content="2024-05-17T04:08:07.000Z">
-<meta property="article:modified_time" content="2024-05-17T09:12:14.079Z">
+<meta property="article:modified_time" content="2024-05-17T10:12:59.850Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="坐标系变换，旋转矩阵，四元数">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.7k words
+          3.6k words
         
       </span>
     
@@ -283,42 +283,41 @@ id="坐标变换旋转矩阵四元数反解欧拉角公式推导">坐标变换�
 <p>本文中，以右手螺旋定则判断旋转角度的正负。</p>
 <h2 id="右手系的坐标系">右手系的坐标系</h2>
 <p>一般的右手系定义中，大拇指指向是<span
-class="math display">\[OZ\]</span>轴，四指指向是<span
-class="math display">\[OX\]</span>轴，四指自然弯曲，从<span
-class="math display">\[OX\]</span>轴绕<span
-class="math display">\[OZ\]</span>轴向四指弯曲方向旋转90°是<span
-class="math display">\[OY\]</span>轴。</p>
-<p>故无论<span
-class="math display">\[X、Y、Z\]</span>三轴朝向怎样，<span
-class="math display">\[X、Y、Z\]</span>三轴相对位置关系是一定的，所以当以一轴为旋转轴，对于剩下的二轴所在的二维平面来说旋转矩阵的形式是一定的。</p>
+class="math inline">\(OZ\)</span>轴，四指指向是<span
+class="math inline">\(OX\)</span>轴，四指自然弯曲，从<span
+class="math inline">\(OX\)</span>轴绕<span
+class="math inline">\(OZ\)</span>轴向四指弯曲方向旋转90°是<span
+class="math inline">\(OY\)</span>轴。</p>
+<p>故无论<span class="math inline">\(X、Y、Z\)</span>三轴朝向怎样，<span
+class="math inline">\(X、Y、Z\)</span>三轴相对位置关系是一定的，所以当以一轴为旋转轴，对于剩下的二轴所在的二维平面来说旋转矩阵的形式是一定的。</p>
 <p>假设旋转前的坐标系为<span
-class="math display">\[a\]</span>,旋转后的坐标系为<span
-class="math display">\[b\]</span>，该平面上有一点<span
-class="math display">\[P\]</span>，则容易得到向量在<span
-class="math display">\[b\]</span>系下的坐标数值大小等于将<span
-class="math display">\[\overrightarrow{OP}\]</span>保持模长不变沿着反方向旋转相同角度在<span
-class="math display">\[a\]</span>系下的坐标数值。
+class="math inline">\(a\)</span>,旋转后的坐标系为<span
+class="math inline">\(b\)</span>，该平面上有一点<span
+class="math inline">\(P\)</span>，则容易得到向量在<span
+class="math inline">\(b\)</span>系下的坐标数值大小等于将<span
+class="math inline">\(\overrightarrow{OP}\)</span>保持模长不变沿着反方向旋转相同角度在<span
+class="math inline">\(a\)</span>系下的坐标数值。
 与复数相乘具有几何意义，具体见下文。所以可用与复数相乘相似的方式来简单地推导出下列三个表达式。</p>
 <h2 id="一二维平面的旋转矩阵">一、二维平面的旋转矩阵</h2>
 <h3 id="xoy平面上的坐标系进行旋转">1、<span
-class="math display">\[XOY\]</span>平面上的坐标系进行旋转</h3>
+class="math inline">\(XOY\)</span>平面上的坐标系进行旋转</h3>
 <p><span
-class="math display">\[XOY\]</span>平面上的坐标系进行旋转,是绕垂直于<span
-class="math display">\[XOY\]</span>平面的轴旋转的，假设这个轴方向与右手系中的<span
-class="math display">\[OZ\]</span>轴方向（在图1.1中垂直于<span
-class="math display">\[XOY\]</span>平面向外）相同且过坐标原点，旋转角度为<span
-class="math display">\[\theta\]</span>。</p>
+class="math inline">\(XOY\)</span>平面上的坐标系进行旋转,是绕垂直于<span
+class="math inline">\(XOY\)</span>平面的轴旋转的，假设这个轴方向与右手系中的<span
+class="math inline">\(OZ\)</span>轴方向（在图1.1中垂直于<span
+class="math inline">\(XOY\)</span>平面向外）相同且过坐标原点，旋转角度为<span
+class="math inline">\(\theta\)</span>。</p>
 <figure>
 <img src="/assets/坐标系xoy.png" srcset="/img/loading.gif" lazyload alt="坐标系xoy" />
 <figcaption aria-hidden="true">坐标系xoy</figcaption>
 </figure>
 <p>​ 图1.1</p>
-<p>假设<span class="math display">\[Y\]</span>轴是虚轴，<span
-class="math display">\[X\]</span>轴是实轴，复数<span
-class="math display">\[Z_1 = x_{ap}+iy_{ap}\]</span>，复数<span
-class="math display">\[Z_2 = x_{bp}+iy_{bp}\]</span>，复数<span
-class="math display">\[Z_3 =
-e^{i(-\theta)}=cos\theta-isin\theta\]</span>。</p>
+<p>假设<span class="math inline">\(Y\)</span>轴是虚轴，<span
+class="math inline">\(X\)</span>轴是实轴，复数<span
+class="math inline">\(Z_1 = x_{ap}+iy_{ap}\)</span>，复数<span
+class="math inline">\(Z_2 = x_{bp}+iy_{bp}\)</span>，复数<span
+class="math inline">\(Z_3 =
+e^{i(-\theta)}=cos\theta-isin\theta\)</span>。</p>
 <p>可由与复数相乘的几何意义得到下列式子1.1.2： <span
 class="math display">\[
 Z_2=Z_1Z_3 \tag{1.1.1}
@@ -348,24 +347,24 @@ i(-x_{ap}sin\theta+y_{ap}cos\theta) \tag{1.1.2}
 \right]        \tag{1.1.3}
 \]</span></p>
 <h3 id="xoz平面上的坐标系进行旋转">2、<span
-class="math display">\[XOZ\]</span>平面上的坐标系进行旋转</h3>
+class="math inline">\(XOZ\)</span>平面上的坐标系进行旋转</h3>
 <p><span
-class="math display">\[XOZ\]</span>平面上的向量旋转，是绕垂直于<span
-class="math display">\[XOZ\]</span>平面的轴旋转的，假设这个轴方向与右手系中的<span
+class="math inline">\(XOZ\)</span>平面上的向量旋转，是绕垂直于<span
+class="math inline">\(XOZ\)</span>平面的轴旋转的，假设这个轴方向与右手系中的<span
 class="math inline">\(Y\)</span>轴方向（在图1.2中垂直于<span
-class="math display">\[XOZ\]</span>平面向外）相同，旋转角度为<span
-class="math display">\[\theta\]</span></p>
+class="math inline">\(XOZ\)</span>平面向外）相同，旋转角度为<span
+class="math inline">\(\theta\)</span></p>
 <figure>
 <img src="/assets/坐标系xoz.png" srcset="/img/loading.gif" lazyload alt="坐标系xoz" />
 <figcaption aria-hidden="true">坐标系xoz</figcaption>
 </figure>
 <p>​ 图1.2</p>
 <p>假设X轴是虚轴，<span
-class="math display">\[Z\]</span>轴是实轴，复数<span
-class="math display">\[Z_1 = z_{ap}+ix_{ap}\]</span>，复数<span
-class="math display">\[Z_2 = z_{bp}+ix_{bp}\]</span>，复数<span
-class="math display">\[Z_3 =
-e^{i(-\theta)}=cos\theta-isin\theta\]</span>。</p>
+class="math inline">\(Z\)</span>轴是实轴，复数<span
+class="math inline">\(Z_1 = z_{ap}+ix_{ap}\)</span>，复数<span
+class="math inline">\(Z_2 = z_{bp}+ix_{bp}\)</span>，复数<span
+class="math inline">\(Z_3 =
+e^{i(-\theta)}=cos\theta-isin\theta\)</span>。</p>
 <p>可由与复数相乘的几何意义得到下列式子1.2.1： <span
 class="math display">\[
 Z_2=Z_1Z_3
@@ -395,22 +394,22 @@ i(-z_{ap}sin\theta+x_{ap}cos\theta) \tag{1.2.1}
 \right]        \tag{1.2.2}
 \]</span></p>
 <h3 id="yoz平面上的坐标系进行旋转">3、<span
-class="math display">\[YOZ\]</span>平面上的坐标系进行旋转</h3>
+class="math inline">\(YOZ\)</span>平面上的坐标系进行旋转</h3>
 <p><span
-class="math display">\[YOZ\]</span>平面上的向量旋转，是绕垂直于<span
-class="math display">\[YOZ\]</span>平面的轴旋转的，假设这个轴方向与右手系中的<span
-class="math display">\[X\]</span>轴方向（在图1.3中垂直于<span
-class="math display">\[YOZ\]</span>平面向外）相同，旋转角度为<span
-class="math display">\[\theta\]</span></p>
+class="math inline">\(YOZ\)</span>平面上的向量旋转，是绕垂直于<span
+class="math inline">\(YOZ\)</span>平面的轴旋转的，假设这个轴方向与右手系中的<span
+class="math inline">\(X\)</span>轴方向（在图1.3中垂直于<span
+class="math inline">\(YOZ\)</span>平面向外）相同，旋转角度为<span
+class="math inline">\(\theta\)</span></p>
 <figure>
 <img src="/assets/坐标系yoz.png" srcset="/img/loading.gif" lazyload alt="坐标系yoz" />
 <figcaption aria-hidden="true">坐标系yoz</figcaption>
 </figure>
 <p>​ 图1.3</p>
-<p>假设Z轴是虚轴，Y轴是实轴，复数<span class="math display">\[Z_1 =
-y_{ap}+iz_{ap}\]</span>，复数<span class="math display">\[Z_2 =
-y_{bp}+iz_{bp}\]</span>，复数<span class="math display">\[Z_3 =
-e^{i(-\theta)}=cos\theta-isin\theta\]</span>。</p>
+<p>假设Z轴是虚轴，Y轴是实轴，复数<span class="math inline">\(Z_1 =
+y_{ap}+iz_{ap}\)</span>，复数<span class="math inline">\(Z_2 =
+y_{bp}+iz_{bp}\)</span>，复数<span class="math inline">\(Z_3 =
+e^{i(-\theta)}=cos\theta-isin\theta\)</span>。</p>
 <p>可由与复数相乘的几何意义得到下列式子1.3.1： <span
 class="math display">\[
 Z_2=Z_1Z_3
@@ -441,58 +440,55 @@ i(-y_{ap}sin\theta+z_{ap}cos\theta) \tag{1.3.1}
 \]</span></p>
 <h2 id="二三维坐标系的旋转矩阵">二、三维坐标系的旋转矩阵</h2>
 <figure>
-<img
-src="D:\workpath\workpath\matlab\my_matlab\rotation\三维旋转_完整.png" srcset="/img/loading.gif" lazyload
-alt="三维旋转_完整" />
+<img src="/assets/三维旋转_完整.png" srcset="/img/loading.gif" lazyload alt="三维旋转_完整" />
 <figcaption aria-hidden="true">三维旋转_完整</figcaption>
 </figure>
 <p>​ 图2.1</p>
 <h3 id="本文所使用的三维坐标系假设">1、本文所使用的三维坐标系假设</h3>
 <p>设坐标系<span
-class="math display">\[OX_aY_aZ_a\]</span>为固定坐标系，坐标系<span
-class="math display">\[b\]</span>是动坐标系。设坐标系<span
-class="math display">\[b\]</span>起始位置（<span
-class="math display">\[OX_bY_bZ_b\]</span>）与坐标系<span
-class="math display">\[OX_aY_aZ_a\]</span>三轴方向平行，且坐标原点重合，坐标系<span
-class="math display">\[b\]</span>旋转之后为<span
-class="math display">\[OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\]</span>坐标系。假设坐标系<span
-class="math display">\[OX_aY_aZ_a\]</span>为三轴正交的坐标系，朝前是<span
-class="math display">\[X_a\]</span>轴，朝右是<span
-class="math display">\[Y_a\]</span>轴，朝上是<span
-class="math display">\[Z_a\]</span>轴。如图2.1所示，故可设任意时刻坐标系<span
-class="math display">\[b\]</span>相对于旋转轴旋转欧拉姿态角<span
-class="math display">\[\psi、\theta、\phi\]</span>（当<span
-class="math display">\[OX_aY_aZ_a\]</span>为地理坐标系，坐标系<span
-class="math display">\[b\]</span>为机体坐标系时，这三个角度分别对应航向角、俯仰角、横滚角），<span
-class="math display">\[ON\]</span>轴表示坐标系<span
-class="math display">\[b\]</span>第一次绕<span
-class="math display">\[OZ_a(OZ_b)\]</span>轴旋转之后的<span
-class="math display">\[X_b&#39;\]</span>轴。</p>
+class="math inline">\(OX_aY_aZ_a\)</span>为固定坐标系，坐标系<span
+class="math inline">\(b\)</span>是动坐标系。设坐标系<span
+class="math inline">\(b\)</span>起始位置（<span
+class="math inline">\(OX_bY_bZ_b\)</span>）与坐标系<span
+class="math inline">\(OX_aY_aZ_a\)</span>三轴方向平行，且坐标原点重合，坐标系<span
+class="math inline">\(b\)</span>旋转之后为<span
+class="math inline">\(OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\)</span>坐标系。假设坐标系<span
+class="math inline">\(OX_aY_aZ_a\)</span>为三轴正交的坐标系，朝前是<span
+class="math inline">\(X_a\)</span>轴，朝右是<span
+class="math inline">\(Y_a\)</span>轴，朝上是<span
+class="math inline">\(Z_a\)</span>轴。如图2.1所示，故可设任意时刻坐标系<span
+class="math inline">\(b\)</span>相对于旋转轴旋转欧拉姿态角<span
+class="math inline">\(\psi、\theta、\phi\)</span>（当<span
+class="math inline">\(OX_aY_aZ_a\)</span>为地理坐标系，坐标系<span
+class="math inline">\(b\)</span>为机体坐标系时，这三个角度分别对应航向角、俯仰角、横滚角），<span
+class="math inline">\(ON\)</span>轴表示坐标系<span
+class="math inline">\(b\)</span>第一次绕<span
+class="math inline">\(OZ_a(OZ_b)\)</span>轴旋转之后的<span
+class="math inline">\(X_b&#39;\)</span>轴。</p>
 <h3 id="旋转顺序">2、旋转顺序</h3>
 <p>一般从固定坐标到动坐标系到动坐标系需要经过三次旋转，每次旋转之后绕不同的轴再进行一次旋转。需满足每次旋转之后，绕旋转轴的角度能和欧拉角相匹配。</p>
 <p>所以在“1、本文所使用的三维坐标系假设”条件下，应选择的旋转顺序为固定坐标系的<span
-class="math display">\[Z-&gt;Y-&gt;X\]</span>，即先绕<span
-class="math display">\[OZ_a(OZ_b)\]</span>轴旋转<span
-class="math display">\[\psi\]</span>，再绕<span
-class="math display">\[OY_b&#39;\]</span>轴旋转<span
-class="math display">\[\theta\]</span>，最后绕<span
-class="math display">\[OX_b&#39;&#39;\]</span>轴旋转<span
-class="math display">\[\phi\]</span>。</p>
+class="math inline">\(Z-&gt;Y-&gt;X\)</span>，即先绕<span
+class="math inline">\(OZ_a(OZ_b)\)</span>轴旋转<span
+class="math inline">\(\psi\)</span>，再绕<span
+class="math inline">\(OY_b&#39;\)</span>轴旋转<span
+class="math inline">\(\theta\)</span>，最后绕<span
+class="math inline">\(OX_b&#39;&#39;\)</span>轴旋转<span
+class="math inline">\(\phi\)</span>。</p>
 <h3 id="旋转矩阵推导">3、旋转矩阵推导</h3>
 <p>已知：三坐标轴相互垂直的正交坐标系间相互变换的旋转矩阵为正交矩阵<span
-class="math display">\[R(\theta)\]</span>，满足<span
-class="math display">\[R(\theta)^{-1} = R(\theta)^{T}\]</span></p>
-<p>设空间中存在一点<span
-class="math display">\[P\]</span>，在坐标系<span
-class="math display">\[OX_aY_aZ_a\]</span>中可表示为<span
-class="math display">\[P(x_{ap},y_{ap},z_{ap})\]</span>，在旋转之后的坐标系<span
-class="math display">\[OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\]</span>中可表示为<span
-class="math display">\[P(x^{&#39;&#39;}_{bp},y^{&#39;&#39;}_{bp},z^{&#39;&#39;}_{bp})\]</span></p>
+class="math inline">\(R(\theta)\)</span>，满足<span
+class="math inline">\(R(\theta)^{-1} = R(\theta)^{T}\)</span></p>
+<p>设空间中存在一点<span class="math inline">\(P\)</span>，在坐标系<span
+class="math inline">\(OX_aY_aZ_a\)</span>中可表示为<span
+class="math inline">\(P(x_{ap},y_{ap},z_{ap})\)</span>，在旋转之后的坐标系<span
+class="math inline">\(OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\)</span>中可表示为<span
+class="math inline">\(P(x^{&#39;&#39;}_{bp},y^{&#39;&#39;}_{bp},z^{&#39;&#39;}_{bp})\)</span></p>
 <h4 id="第1次旋转">（1）第1次旋转</h4>
-<p>设坐标系<span class="math display">\[b\]</span>第一次绕<span
-class="math display">\[OZ_a(OZ_b)\]</span>轴旋转<span
-class="math display">\[\psi\]</span>之后的坐标系是<span
-class="math display">\[OX_{b}&#39;Y_b&#39;Z_b\]</span></p>
+<p>设坐标系<span class="math inline">\(b\)</span>第一次绕<span
+class="math inline">\(OZ_a(OZ_b)\)</span>轴旋转<span
+class="math inline">\(\psi\)</span>之后的坐标系是<span
+class="math inline">\(OX_{b}&#39;Y_b&#39;Z_b\)</span></p>
 <figure>
 <img src="/assets/三维旋转_第一次.png" srcset="/img/loading.gif" lazyload alt="三维旋转_第一次" />
 <figcaption aria-hidden="true">三维旋转_第一次</figcaption>
@@ -531,10 +527,10 @@ R_z = \left[
 \right]   \tag{2.3.2}
 \]</span></p>
 <h4 id="第2次旋转">（2）第2次旋转</h4>
-<p>设坐标系<span class="math display">\[b\]</span>第2次绕<span
-class="math display">\[OY^{&#39;}_b\]</span>轴旋转<span
-class="math display">\[\theta\]</span>之后的坐标系是<span
-class="math display">\[OX^{&#39;&#39;}_{b}Y^{&#39;}_bZ^{&#39;}_b\]</span></p>
+<p>设坐标系<span class="math inline">\(b\)</span>第2次绕<span
+class="math inline">\(OY^{&#39;}_b\)</span>轴旋转<span
+class="math inline">\(\theta\)</span>之后的坐标系是<span
+class="math inline">\(OX^{&#39;&#39;}_{b}Y^{&#39;}_bZ^{&#39;}_b\)</span></p>
 <figure>
 <img src="/assets/三维旋转_第二次.png" srcset="/img/loading.gif" lazyload alt="三维旋转_第二次" />
 <figcaption aria-hidden="true">三维旋转_第二次</figcaption>
@@ -572,10 +568,10 @@ R_y=\left[
 \right] \tag{2.3.4}
 \]</span></p>
 <h4 id="第3次旋转">（3）第3次旋转</h4>
-<p>设坐标系<span class="math display">\[b\]</span>第3次绕<span
-class="math display">\[OX^{&#39;&#39;}_b\]</span>轴旋转<span
-class="math display">\[\phi\]</span>之后的坐标系是<span
-class="math display">\[OX^{&#39;&#39;}_{b}Y^{&#39;&#39;}_bZ^{&#39;&#39;}_b\]</span></p>
+<p>设坐标系<span class="math inline">\(b\)</span>第3次绕<span
+class="math inline">\(OX^{&#39;&#39;}_b\)</span>轴旋转<span
+class="math inline">\(\phi\)</span>之后的坐标系是<span
+class="math inline">\(OX^{&#39;&#39;}_{b}Y^{&#39;&#39;}_bZ^{&#39;&#39;}_b\)</span></p>
 <figure>
 <img src="/assets/三维旋转_第三次.png" srcset="/img/loading.gif" lazyload alt="三维旋转_第三次" />
 <figcaption aria-hidden="true">三维旋转_第三次</figcaption>
@@ -613,8 +609,8 @@ R_x=\left[
 \right]  \tag{2.3.6}
 \]</span></p>
 <h4 id="坐标系ox_ay_az_a到坐标系ox_by_bz_b的旋转矩阵">（4）坐标系<span
-class="math display">\[OX_aY_aZ_a\]</span>到坐标系<span
-class="math display">\[OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\]</span>的旋转矩阵</h4>
+class="math inline">\(OX_aY_aZ_a\)</span>到坐标系<span
+class="math inline">\(OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\)</span>的旋转矩阵</h4>
 <p><span class="math display">\[
 \left[
 \begin{array}{ccc}
@@ -634,26 +630,23 @@ class="math display">\[OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\]</span
 C^b_a= R_xR_yR_z \tag{2.3.7}
 \]</span></p>
 <p><span class="math display">\[
-C^b_a= \left[\begin{array}{ccc}
-\cos \left(\psi \right)\,\cos \left(\theta \right) &amp; \cos
-\left(\theta \right)\,\sin \left(\psi \right) &amp; -\sin \left(\theta
-\right)\\
-\cos \left(\psi \right)\,\sin \left(\phi \right)\,\sin \left(\theta
-\right)-\cos \left(\phi \right)\,\sin \left(\psi \right) &amp; \cos
-\left(\phi \right)\,\cos \left(\psi \right)+\sin \left(\phi
-\right)\,\sin \left(\psi \right)\,\sin \left(\theta \right) &amp; \cos
-\left(\theta \right)\,\sin \left(\phi \right)\\
-\sin \left(\phi \right)\,\sin \left(\psi \right)+\cos \left(\phi
-\right)\,\cos \left(\psi \right)\,\sin \left(\theta \right) &amp; \cos
-\left(\phi \right)\,\sin \left(\psi \right)\,\sin \left(\theta
-\right)-\cos \left(\psi \right)\,\sin \left(\phi \right) &amp; \cos
-\left(\phi \right)\,\cos \left(\theta \right)
-\end{array}\right]\tag{2.3.8}
+\begin{flalign}
+C^b_a &amp;= \begin{bmatrix}
+cos (\psi )cos (\theta ) &amp; cos (\theta )sin (\psi ) &amp; -sin
+(\theta )\\
+cos (\psi )sin (\phi )sin (\theta )-cos (\phi )sin (\psi ) &amp; cos
+(\phi )cos (\psi )+sin (\phi )sin (\psi )sin (\theta ) &amp; cos (\theta
+)sin (\phi )\\
+sin (\phi )sin (\psi )+cos (\phi )cos (\psi )sin (\theta ) &amp; cos
+(\phi )sin (\psi )sin (\theta )-cos (\psi )sin (\phi ) &amp; cos (\phi
+)cos (\theta )
+\end{bmatrix}
+\end{flalign} \tag{2.3.8}
 \]</span></p>
 <h4
 id="坐标系ox_by_bz_b到坐标系坐标系ox_ay_az_a的旋转矩阵">（5）坐标系<span
-class="math display">\[OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\]</span>到坐标系坐标系<span
-class="math display">\[OX_aY_aZ_a\]</span>的旋转矩阵</h4>
+class="math inline">\(OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\)</span>到坐标系坐标系<span
+class="math inline">\(OX_aY_aZ_a\)</span>的旋转矩阵</h4>
 <p><span class="math display">\[
 \left[
 \begin{array}{ccc}
@@ -672,42 +665,41 @@ class="math display">\[OX_aY_aZ_a\]</span>的旋转矩阵</h4>
 <p><span class="math display">\[
 C^a_b= {(C^b_a)}^{(-1)}={(C^b_a)}^{T}=R^T_zR^T_yR^T_x\tag{2.3.9}
 \]</span></p>
-<p><span class="math display">\[
+<p>(此处公式超出界面了，之后会解决，抱歉) <span class="math display">\[
 C^a_b=\left[\begin{array}{ccc}
-\cos \left({\psi} \right)\,\cos \left({\theta} \right) &amp; \cos
-\left({\psi} \right)\,\sin \left({\phi} \right)\,\sin \left({\theta}
-\right)-\cos \left({\phi} \right)\,\sin \left({\psi} \right) &amp; \sin
-\left({\phi} \right)\,\sin \left({\psi} \right)+\cos \left({\phi}
-\right)\,\cos \left({\psi} \right)\,\sin \left({\theta} \right)\\
-\cos \left({\theta} \right)\,\sin \left({\psi} \right) &amp; \cos
-\left({\phi} \right)\,\cos \left({\psi} \right)+\sin \left({\phi}
-\right)\,\sin \left({\psi} \right)\,\sin \left({\theta} \right) &amp;
-\cos \left({\phi} \right)\,\sin \left({\psi} \right)\,\sin
-\left({\theta} \right)-\cos \left({\psi} \right)\,\sin \left({\phi}
-\right)\\
--\sin \left({\theta} \right) &amp; \cos \left({\theta} \right)\,\sin
-\left({\phi} \right) &amp; \cos \left({\phi} \right)\,\cos
-\left({\theta} \right)
+\cos \left({\psi} \right)\cos \left({\theta} \right) &amp; \cos
+\left({\psi} \right)sin \left({\phi} \right)sin \left({\theta}
+\right)-\cos \left({\phi} \right)sin \left({\psi} \right) &amp; sin
+\left({\phi} \right)sin \left({\psi} \right)+\cos \left({\phi}
+\right)\cos \left({\psi} \right)sin \left({\theta} \right)\\
+\cos \left({\theta} \right)sin \left({\psi} \right) &amp; \cos
+\left({\phi} \right)\cos \left({\psi} \right)+sin \left({\phi}
+\right)sin \left({\psi} \right)sin \left({\theta} \right) &amp; \cos
+\left({\phi} \right)sin \left({\psi} \right)sin \left({\theta}
+\right)-\cos \left({\psi} \right)sin \left({\phi} \right)\\
+-sin \left({\theta} \right) &amp; \cos \left({\theta} \right)sin
+\left({\phi} \right) &amp; \cos \left({\phi} \right)\cos \left({\theta}
+\right)
 \end{array}\right]\tag{2.3.10}
 \]</span></p>
 <h2 id="三欧拉角表示旋转的缺陷">三、欧拉角表示旋转的缺陷</h2>
 <p>欧拉角表示旋转存在万向锁问题</p>
 <p>仍然以“二”中假设的坐标系为例，用欧拉角表示旋转时第2次旋转时<span
-class="math display">\[|\theta|\]</span>不能等于90°，下面以欧拉角的微分方程推导来说明原因。</p>
-<p>假设坐标系<span class="math display">\[b\]</span>相对于坐标系<span
-class="math display">\[OX_aY_aZ_a\]</span>的角速度分别为<strong><span
-class="math display">\[\dot{\psi}\]</span>、<span
-class="math display">\[\dot{\theta}\]</span>、<span
-class="math display">\[\dot{\phi}\]</span></strong>，假设这三个角速度矢量在坐标系<span
-class="math display">\[b\]</span>最终位置坐标系<span
-class="math display">\[OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\]</span>的轴向分量分别为<span
-class="math display">\[\omega_{zb}、\omega_{yb}、\omega_{xb}\]</span></p>
+class="math inline">\(|\theta|\)</span>不能等于90°，下面以欧拉角的微分方程推导来说明原因。</p>
+<p>假设坐标系<span class="math inline">\(b\)</span>相对于坐标系<span
+class="math inline">\(OX_aY_aZ_a\)</span>的角速度分别为<strong><span
+class="math inline">\(\dot{\psi}\)</span>、<span
+class="math inline">\(\dot{\theta}\)</span>、<span
+class="math inline">\(\dot{\phi}\)</span></strong>，假设这三个角速度矢量在坐标系<span
+class="math inline">\(b\)</span>最终位置坐标系<span
+class="math inline">\(OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\)</span>的轴向分量分别为<span
+class="math inline">\(\omega_{zb}、\omega_{yb}、\omega_{xb}\)</span></p>
 <p>在坐标系<span
-class="math display">\[b\]</span>从初始位置旋转到坐标系<span
-class="math display">\[OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\]</span>的过程中：</p>
+class="math inline">\(b\)</span>从初始位置旋转到坐标系<span
+class="math inline">\(OX_b^{&#39;&#39;}Y_b^{&#39;&#39;}Z_b^{&#39;&#39;}\)</span>的过程中：</p>
 <p>进行第1次旋转后，得到了<span
-class="math display">\[\dot{\psi}\]</span>，将其转换为<span
-class="math display">\[\omega_{zb}\]</span>，还需最后2次的旋转矩阵来做变换：
+class="math inline">\(\dot{\psi}\)</span>，将其转换为<span
+class="math inline">\(\omega_{zb}\)</span>，还需最后2次的旋转矩阵来做变换：
 <span class="math display">\[
 \left[
 \begin{array}{ccc}
@@ -723,7 +715,7 @@ class="math display">\[\omega_{zb}\]</span>，还需最后2次的旋转矩阵来
 \end{array}
 \right] \tag{3.1}
 \]</span> 进行第2次旋转时,得到了<span
-class="math display">\[\dot{\theta}\]</span>，还需使用第3次的旋转矩阵来进行角速度的变换：
+class="math inline">\(\dot{\theta}\)</span>，还需使用第3次的旋转矩阵来进行角速度的变换：
 <span class="math display">\[
 \left[
 \begin{array}{ccc}
@@ -749,10 +741,10 @@ class="math display">\[\dot{\theta}\]</span>，还需使用第3次的旋转矩�
      \omega_{zb}
 \end{array}
 \right] = \left[\begin{array}{c}
-{\dot{\phi}} -\sin \left(\theta \right)\,\dot{\psi} \\
-\cos \left(\phi \right)\,\dot{\theta} +\cos \left(\theta \right)\,\sin
+{\dot{\phi}} -sin \left(\theta \right)\,\dot{\psi} \\
+\cos \left(\phi \right)\,\dot{\theta} +\cos \left(\theta \right)\,sin
 \left(\phi \right)\,\dot{\psi} \\
-\cos \left(\phi \right)\,\cos \left(\theta \right)\,\dot{\psi} -\sin
+\cos \left(\phi \right)\,\cos \left(\theta \right)\,\dot{\psi} -sin
 \left(\phi \right)\,\dot{\theta}
 \end{array}\right]
 \]</span></p>
@@ -765,9 +757,9 @@ class="math display">\[\dot{\theta}\]</span>，还需使用第3次的旋转矩�
 \end{array}
 \right] = \left[
 \begin{array}{ccc}
-     1 &amp; 0 &amp; -\sin{(\theta)}\\
-     0 &amp; \cos{(\phi)} &amp; \cos{(\theta)} \sin{(\phi)}\\
-     0 &amp; -\sin{(\phi)} &amp; \cos{(\phi)}\cos{(\theta)}
+     1 &amp; 0 &amp; -sin{(\theta)}\\
+     0 &amp; \cos{(\phi)} &amp; \cos{(\theta)} sin{(\phi)}\\
+     0 &amp; -sin{(\phi)} &amp; \cos{(\phi)}\cos{(\theta)}
 \end{array}
 \right] \left[
 \begin{array}{ccc}
@@ -786,9 +778,9 @@ class="math display">\[\dot{\theta}\]</span>，还需使用第3次的旋转矩�
 \end{array}
 \right]= \left[
 \begin{array}{ccc}
-     1 &amp; 0 &amp; -\sin{(\theta)}\\
-     0 &amp; \cos{(\phi)} &amp; \cos{(\theta)} \sin{(\phi)}\\
-     0 &amp; -\sin{(\phi)} &amp; \cos{(\phi)}\cos{(\theta)}
+     1 &amp; 0 &amp; -sin{(\theta)}\\
+     0 &amp; \cos{(\phi)} &amp; \cos{(\theta)} sin{(\phi)}\\
+     0 &amp; -sin{(\phi)} &amp; \cos{(\phi)}\cos{(\theta)}
 \end{array}
 \right]^{-1} \left[
 \begin{array}{ccc}
@@ -807,11 +799,11 @@ class="math display">\[\dot{\theta}\]</span>，还需使用第3次的旋转矩�
 \end{array}
 \right]= \frac{1}{\cos{\theta}}\left[
 \begin{array}{ccc}
-     \cos{(\theta)} &amp; \sin{(\phi)}\sin{(\theta)} &amp;
-\cos{(\phi)}\sin{(\theta)} \\
+     \cos{(\theta)} &amp; sin{(\phi)}sin{(\theta)} &amp;
+\cos{(\phi)}sin{(\theta)} \\
      0 &amp; \cos{(\phi)}\cos{(\theta)} &amp;
--\sin{(\phi)}\cos{(\theta)}\\
-     0 &amp; \sin{(\phi)} &amp; \cos{(\phi)}
+-sin{(\phi)}\cos{(\theta)}\\
+     0 &amp; sin{(\phi)} &amp; \cos{(\phi)}
 \end{array}
 \right] \left[
 \begin{array}{ccc}
@@ -821,24 +813,23 @@ class="math display">\[\dot{\theta}\]</span>，还需使用第3次的旋转矩�
 \end{array}
 \right] \tag{3.5}
 \]</span> 由方程3.5可得，<span
-class="math display">\[|\theta|\]</span>等于<span
-class="math display">\[90°\]</span>时，方程出现奇点。</p>
+class="math inline">\(|\theta|\)</span>等于<span
+class="math inline">\(90°\)</span>时，方程出现奇点。</p>
 <h2 id="四四元数表示旋转">四、四元数表示旋转</h2>
 <h3
 id="二维复平面中与复数reibeta相乘的几何意义">1、二维复平面中，与复数<span
-class="math display">\[re^{i\beta}\]</span>相乘的几何意义</h3>
+class="math inline">\(re^{i\beta}\)</span>相乘的几何意义</h3>
 <p>设二维复平面中的一个复数<span
-class="math display">\[r_{1}e^{i\beta}\]</span>，其对应的经过坐标原点的向量为<span
-class="math display">\[ \overrightarrow{v}\]</span>，<span
-class="math display">\[r_{1}e^{i\beta}\]</span>与<span
-class="math display">\[re^{i\theta}\]</span>相乘意味着，<span
-class="math display">\[ \overrightarrow{v}\]</span>模长变为原来的<span
-class="math display">\[r\]</span>倍，且绕坐标原点旋转<span
-class="math display">\[\beta\]</span>角度</p>
+class="math inline">\(r_{1}e^{i\beta}\)</span>，其对应的经过坐标原点的向量为$
+<span class="math inline">\(，\)</span>r_{1}e<sup>{i}<span
+class="math inline">\(与\)</span>re</sup>{i}<span
+class="math inline">\(相乘意味着，\)</span> <span
+class="math inline">\(模长变为原来的\)</span>r<span
+class="math inline">\(倍，且绕坐标原点旋转\)</span>$角度</p>
 <h3 id="四元数相乘也具有几何意义">2、四元数相乘也具有几何意义</h3>
-<p>假设一个纯四元数<span class="math display">\[\hat{P} =
-(0,p_x,p_y,p_y)\]</span>，其可对应在三维空间中的一个向量。假设一个单位四元数<span
-class="math display">\[\hat{q}=(q_0,q_1,q_2,q_3)，q_0\]</span>代表实部。
+<p>假设一个纯四元数<span class="math inline">\(\hat{P} =
+(0,p_x,p_y,p_y)\)</span>，其可对应在三维空间中的一个向量。假设一个单位四元数<span
+class="math inline">\(\hat{q}=(q_0,q_1,q_2,q_3)，q_0\)</span>代表实部。
 对于四元数有 <span class="math display">\[
 q^{-}=\frac{q^{*}}{|q|} \tag{4.2.1}
 \]</span> 对于单位四元数有: <span class="math display">\[
@@ -848,45 +839,44 @@ q^{-}=q^{*} \tag{4.2.3}
 \]</span></p>
 <h4 id="轴角表示旋转与四元数的关系">（1）轴角表示旋转与四元数的关系</h4>
 <p>假设一个以单位向量定义的旋转轴<span
-class="math display">\[\hat{u}=(ux,uy,uz)\]</span>，点<span
-class="math display">\[v\]</span>的坐标<span
-class="math display">\[(0,x_v,y_v,z_v)\]</span>以该旋转轴右手系方向旋转<span
-class="math display">\[\alpha\]</span>角度后变为点<span
-class="math display">\[v&#39;\]</span>，<span
-class="math display">\[\hat{q}=(q_0,q_1,q_2,q_3)\]</span>为单位四元数，有以下关系式：
+class="math inline">\(\hat{u}=(ux,uy,uz)\)</span>，点<span
+class="math inline">\(v\)</span>的坐标<span
+class="math inline">\((0,x_v,y_v,z_v)\)</span>以该旋转轴右手系方向旋转<span
+class="math inline">\(\alpha\)</span>角度后变为点<span
+class="math inline">\(v&#39;\)</span>，<span
+class="math inline">\(\hat{q}=(q_0,q_1,q_2,q_3)\)</span>为单位四元数，有以下关系式：
 <span class="math display">\[
 \hat{v&#39;}=\hat{q}\hat{v}\hat{q}^{-}=\hat{q}\hat{v}\hat{q}^{*}
 \tag{4.2.4}
 \]</span> 其中： <span class="math display">\[
-\hat{q}=(\cos\frac{\alpha}{2},\overrightarrow{u} \sin\frac{\alpha}{2})
+\hat{q}=(\cos\frac{\alpha}{2},\overrightarrow{u} sin\frac{\alpha}{2})
 \tag{4.2.5}
 \]</span></p>
 <h4 id="四元数表示旋转矩阵">（2）四元数表示旋转矩阵</h4>
 <p>将式4.2.4利用四元数乘法展开可得到四元数表示的旋转矩阵： <span
 class="math display">\[
-\left[
-\begin{array}{ccc}
+\begin{equation}
+\begin{split}
+\begin{bmatrix}
      x^{&#39;}_v \\
      y^{&#39;}_v\\
      z^{&#39;}_v
-\end{array}
-\right]  =
-\left[
-\begin{array}{ccc}
+\end{bmatrix}
+&amp;=\begin{bmatrix}
      1-2(q_2^2+q_3^2) &amp; 2(q_1q_2-q_0q_3) &amp; 2(q_1q_3+q_0q_2) \\
      2(q_1q_2+q_0q_3) &amp; 1-2(q_1^2+q_3^2) &amp; 2(q_2q_3-q_0q_1) \\
      2(q_1q_3-q_0q_2)  &amp; 2(q_2q_3+q_0q_1) &amp; 1-2(q_1^2+q_2^2)   
-\end{array} \right]
-\left[
-\begin{array}{ccc}
+\end{bmatrix}
+\begin{bmatrix}
      x_v \\
      y_v\\
      z_v
-\end{array}
-\right] \tag{4.2.5}
+\end{bmatrix}
+\end{split}
+\end{equation} \tag{4.2.5}
 \]</span> 其中： <span class="math display">\[
-q_0=\cos\frac{\alpha}{2},q_1=u_x \sin\frac{\alpha}{2},q_2=u_y
-\sin\frac{\alpha}{2},q_3=u_z \sin\frac{\alpha}{2}  \tag{4.2.6}
+q_0=\cos\frac{\alpha}{2},q_1=u_x sin\frac{\alpha}{2},q_2=u_y
+sin\frac{\alpha}{2},q_3=u_z sin\frac{\alpha}{2}  \tag{4.2.6}
 \]</span> 四元数旋转矩阵如下： <span class="math display">\[
 R = \left[
 \begin{array}{ccc}
@@ -899,7 +889,7 @@ R = \left[
 <p>当式4.2.7的旋转矩阵代表的是动坐标系到固定坐标系的旋转，且坐标系方向、角度定义与“二”中相同时，可通过与式2.3.10相比较，计算得到欧拉角大小。
 <span class="math display">\[
 \frac{(C^a_{b})_{32}}{(C^a_{b})_{33}}=\tan\phi=\frac{b_{32}}{b_{33}}\\
-(C^a_{b})_{31}=\sin(-\theta) =b_{31}\\
+(C^a_{b})_{31}=sin(-\theta) =b_{31}\\
 \frac{(C^a_{b})_{21}}{(C^a_{b})_{11}}=\tan\psi=\frac{b_{21}}{b_{11}}\\
 \]</span></p>
 <p><span class="math display">\[
@@ -915,8 +905,8 @@ R = \left[
 -2\,{q_3 }^2 +1\right) \tag{4.2.10}
 \]</span></p>
 <p>可由单位四元数<span
-class="math display">\[q_0^2+q_1^2+q_2^2+q_3^2=1\]</span>，变换出<span
-class="math display">\[q_i^2\]</span>和项的不同形式。</p>
+class="math inline">\(q_0^2+q_1^2+q_2^2+q_3^2=1\)</span>，变换出<span
+class="math inline">\(q_i^2\)</span>和项的不同形式。</p>
 
                 
               </div>
@@ -1007,9 +997,9 @@ class="math display">\[q_i^2\]</span>和项的不同形式。</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/05/17/LQR%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC%E4%BB%A5%E5%8F%8A%E5%BA%94%E7%94%A8/" title="以倒立摆为例，学习设计LQR控制器">
+                      <a href="/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" title="Linux下配置强化学习环境">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">以倒立摆为例，学习设计LQR控制器</span>
+                        <span class="hidden-mobile">Linux下配置强化学习环境</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
