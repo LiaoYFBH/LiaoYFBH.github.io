@@ -16,26 +16,28 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文为对状态反馈和极点配置的知识点总结">
+    <meta name="description" content="本文为感知机的学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="状态反馈和极点配置知识点总结">
-<meta property="og:url" content="http://example.com/2024/05/17/%E7%8A%B6%E6%80%81%E5%8F%8D%E9%A6%88%E5%92%8C%E6%9E%81%E7%82%B9%E9%85%8D%E7%BD%AE%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:title" content="感知机(perceptron)学习笔记">
+<meta property="og:url" content="http://example.com/2024/11/28/%E6%84%9F%E7%9F%A5%E6%9C%BA/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="本文为对状态反馈和极点配置的知识点总结">
+<meta property="og:description" content="本文为感知机的学习笔记">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/assets/image-20240426121853647.png">
-<meta property="article:published_time" content="2024-05-17T04:08:07.000Z">
-<meta property="article:modified_time" content="2024-12-03T15:44:18.301Z">
+<meta property="og:image" content="http://example.com/2024/11/28/%E6%84%9F%E7%9F%A5%E6%9C%BA/assets/%E7%A5%9E%E7%BB%8F%E5%85%83%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/2024/11/28/%E6%84%9F%E7%9F%A5%E6%9C%BA/assets/%E4%B8%8E%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/2024/11/28/%E6%84%9F%E7%9F%A5%E6%9C%BA/assets/%E6%88%96%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/2024/11/28/%E6%84%9F%E7%9F%A5%E6%9C%BA/assets/%E9%9D%9E%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/2024/11/28/%E6%84%9F%E7%9F%A5%E6%9C%BA/assets/%E5%BC%82%E6%88%96%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="article:published_time" content="2024-11-28T13:37:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T15:43:40.827Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="现代控制理论">
-<meta property="article:tag" content="状态反馈">
-<meta property="article:tag" content="极点配置">
+<meta property="article:tag" content="机器学习，感知机">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/assets/image-20240426121853647.png">
+<meta name="twitter:image" content="http://example.com/2024/11/28/%E6%84%9F%E7%9F%A5%E6%9C%BA/assets/%E7%A5%9E%E7%BB%8F%E5%85%83%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
   
   
   
-  <title>状态反馈和极点配置知识点总结 - Hexo</title>
+  <title>感知机(perceptron)学习笔记 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="状态反馈和极点配置知识点总结"></span>
+            <span id="subtitle" data-typed-text="感知机(perceptron)学习笔记"></span>
           
         </div>
 
@@ -212,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-05-17 12:08" pubdate>
-          May 17, 2024 pm
+        <time datetime="2024-11-28 21:37" pubdate>
+          November 28, 2024 pm
         </time>
       </span>
     
@@ -224,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k words
+          1.4k words
         
       </span>
     
@@ -235,7 +237,7 @@
         
         
         
-          20 mins
+          12 mins
         
       </span>
     
@@ -272,375 +274,371 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">状态反馈和极点配置知识点总结</h1>
+            <h1 id="seo-header">感知机(perceptron)学习笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <p>本文为对状态反馈和极点配置的知识点总结 <span id="more"></span> ###
-1、状态反馈和输出反馈</p>
-<h4 id="状态反馈和输出反馈">1.1 状态反馈和输出反馈</h4>
-<h5 id="状态反馈">(1)状态反馈</h5>
-<p><span class="math inline">\(\dot{x} = Ax+Bu\)</span></p>
-<p><span class="math inline">\(y=Cx\)</span></p>
-<p>引入状态的线性反馈：<span class="math inline">\(u=v-Kx\)</span></p>
+                <p>本文为感知机的学习笔记</p>
+<span id="more"></span>
+<h2 id="感知机perceptron">感知机(perceptron)</h2>
+<p>有监督学习。误分类驱动。</p>
+<h3 id="一-数学概念介绍">一 数学概念介绍</h3>
+<h4 id="n维欧式空间rn"><span
+class="math inline">\(n\)</span>维欧式空间(<span
+class="math inline">\(R^n\)</span>)</h4>
+<p>现实空间的抽象与推广</p>
+<p>设<span class="math inline">\(n\)</span>是正整数，由<span
+class="math inline">\(n\)</span>个实数构成的有序数组<span
+class="math inline">\(x=(x_1,x_2,\dots,x_n)\)</span>的全体所组成的集合，称为<span
+class="math inline">\(n\)</span>维欧几里得空间。</p>
+<h4 id="超平面">超平面</h4>
+<p><span class="math inline">\(n\)</span>维欧氏空间中，<span
+class="math inline">\(n-1\)</span>维度的线性子空间。</p>
+<p>是一个数学概率。</p>
+<h4 id="gram矩阵">Gram矩阵</h4>
+<p>一组向量内积的矩阵，给定一组向量<span
+class="math inline">\(v_1,v_2,\dots,v_n\)</span>，它们的Gram矩阵(<span
+class="math inline">\(n\)</span> x <span
+class="math inline">\(n\)</span>维度)如下：</p>
+<p><span class="math display">\[ G = \begin{bmatrix} (\mathbf{v}_1 \cdot
+\mathbf{v}_1) &amp; (\mathbf{v}_1 \cdot \mathbf{v}_2) &amp; \cdots &amp;
+(\mathbf{v}_1 \cdot \mathbf{v}_n) \\ (\mathbf{v}_2 \cdot \mathbf{v}_1)
+&amp; (\mathbf{v}_2 \cdot \mathbf{v}_2) &amp; \cdots &amp; (\mathbf{v}_2
+\cdot \mathbf{v}_n) \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+(\mathbf{v}_n \cdot \mathbf{v}_1) &amp; (\mathbf{v}_n \cdot
+\mathbf{v}_2) &amp; \cdots &amp; (\mathbf{v}_n \cdot \mathbf{v}_n)
+\end{bmatrix} \]</span></p>
+<h3 id="二-感知机">二 感知机</h3>
+<p>使用一个超平面对数据集进行二分类。</p>
+<p>类比神经元(两层神经元，输入层和输出层)，示意图如下：</p>
 <figure>
-<img src="/assets/image-20240426121853647.png" srcset="/img/loading.gif" lazyload
-alt="image-20240426121853647" />
-<figcaption aria-hidden="true">image-20240426121853647</figcaption>
+<img src="./assets/神经元示意图.png" srcset="/img/loading.gif" lazyload alt="神经元示意图" />
+<figcaption aria-hidden="true">神经元示意图</figcaption>
 </figure>
-<p>故: <span class="math display">\[
-\begin{equation}
-\begin{split}
-\dot{x}&amp;=Ax+B(v-Kx) \\
-&amp;=(A-BK)x+Bv\\
-y&amp;=Cx\\
-\end{split}
-\end{equation}
-\]</span> 故特征多项式：<span
-class="math inline">\(\alpha(s)=det(sI-A+BK)\)</span></p>
-<p>传递函数矩阵：<span
-class="math inline">\(G_k(s)=C(sI-A+BK)^{-1}B\)</span></p>
-<h5 id="输出反馈">(2)输出反馈</h5>
-<figure>
-<img src="/assets/image-20240426121831966.png" srcset="/img/loading.gif" lazyload
-alt="image-20240426121831966" />
-<figcaption aria-hidden="true">image-20240426121831966</figcaption>
-</figure>
-<p>有： <span class="math display">\[
-\begin{equation}
-\begin{split}
-\dot{x}&amp;=Ax+Bu\\
-&amp;=Ax+B(v-Fy)\\
-&amp;=Ax+B(v-FCx)\\
-&amp;=(A-BFC)x+Bv\\
-y&amp;=Cx
-\end{split}
-\end{equation}
-\]</span> 特征多项式：<span
-class="math inline">\(\alpha(s)=det(sI-A+BFC)\)</span></p>
-<p>传递函数矩阵:<span
-class="math inline">\(G_F(s)=C(sI-A+BFC)^{-1}B\)</span></p>
-<h5 id="状态反馈和输出反馈的比较">(3)状态反馈和输出反馈的比较</h5>
-<figure>
-<img src="/assets/image-20240426120316441.png" srcset="/img/loading.gif" lazyload
-alt="image-20240426120316441" />
-<figcaption aria-hidden="true">image-20240426120316441</figcaption>
-</figure>
-<p>对于反馈功能：输出反馈能完成的任务，状态反馈一定能完成；反之不一定。</p>
-<h4 id="反馈结构对系统性能的影响">1.2 反馈结构对系统性能的影响</h4>
-<h5 id="对于系统能控性和能观测性">(1)对于系统能控性和能观测性</h5>
-<p><strong>结论</strong>：状态反馈不改变系统能控性，但可能改变系统的能观测性。</p>
-<p>当闭环反馈系统出现零极点对消，被消去的极点便是不可观测的。</p>
-<h5
-id="对系统稳定性只总结了状态反馈镇定">(2)对系统稳定性（只总结了状态反馈镇定）</h5>
-<p>状态反馈和输出反馈都改变系统的特征值，从而影响系统的稳定性。</p>
-<p>可镇定性：若采用反馈措施能使闭环系统稳定，则称该系统是反馈可镇定的。</p>
-<h5 id="状态反馈镇定"><strong>状态反馈镇定</strong></h5>
-<p>有线性定常受控系统：</p>
-<p><span class="math inline">\(\dot{x}=Ax+Bu\)</span></p>
-<p>有<span class="math inline">\(x(0)=x_0\)</span>，<span
-class="math inline">\(t \geq 0\)</span></p>
-<p>若可以找到反馈状态控制律：<span
-class="math inline">\(u=v-Kx\)</span></p>
-<p>使得构成的反馈闭环系统：<span
-class="math inline">\(\dot{x}=(A-BK)x+Bv\)</span>是渐进稳定的，即<span
-class="math inline">\((A-BK)\)</span>的特征值均具有负实部，则称系统实现了状态反馈镇定。</p>
-<p>使线性定常系统状态反馈镇定（状态反馈闭环反馈系统稳定）的<strong>必要条件</strong>：该线性定常系统的不能控部分是渐进稳定的。</p>
+<h4 id="定义说明">定义说明</h4>
+<p>设训练数据集<span
+class="math inline">\(D=\{(x_1,y_1),\dots,(x_m,y_m)\}\)</span>。<span
+class="math inline">\((x_i,y_i)\)</span>表示第<span
+class="math inline">\(i\)</span>对样本。<span class="math inline">\(x
+\in \Chi \subseteq  R^n\)</span>，代表实例的特征向量。<span
+class="math inline">\(Y=\{+1,-1\}\)</span>，<span
+class="math inline">\(y \in
+Y\)</span>，代表实例的类别。得到一个模型(<span
+class="math inline">\(f\)</span>代表激活函数(activate function)）: <span
+class="math display">\[
+f(x)=f(w \cdot x+b)
+\]</span> 其中，<span
+class="math inline">\(w\)</span>代表权值向量，其维度和特征向量<span
+class="math inline">\(x\)</span>相同；<span
+class="math inline">\(b\)</span>代表偏置，为超平面参数，对应的超平面为:
+<span class="math display">\[
+w \cdot x+b=0
+\]</span></p>
+<h5 id="较典型的激活函数">较典型的激活函数</h5>
 <table>
 
 <thead>
 <tr class="header">
-<th>线性定常系统是否完全能控</th>
-<th>线性定常系统不能控部分是否渐进稳定</th>
-<th>其状态反馈是否为可镇定</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>是</td>
-<td>无不能控部分</td>
-<td>是</td>
-</tr>
-<tr class="even">
-<td>否</td>
-<td>是（不能控部分极点均具有负实部）</td>
-<td>是</td>
-</tr>
-<tr class="odd">
-<td>否</td>
-<td>否（不能控部分极点具有非负实部）</td>
-<td>否</td>
-</tr>
-</tbody>
-</table>
-<h3 id="状态反馈极点配置">2、状态反馈极点配置</h3>
-<h5 id="极点配置问题的提法">2.1 极点配置问题的提法</h5>
-<table>
-
-<thead>
-<tr class="header">
-<th>连续时间线性时不变系统反馈方式</th>
-<th>能否任意配置系统的全部极点</th>
+<th>名称</th>
+<th>公式</th>
 <th></th>
-<th>能否配置能控部分的极点</th>
-<th>能否配置不能控部分的极点</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>状态反馈</td>
-<td>否</td>
+<td>符号函数<span class="math inline">\(sign(x)\)</span></td>
+<td><span class="math inline">\(sign(x)=\begin{cases}+1, &amp; x \geq 0
+\\-1, &amp; x &lt; 0\end{cases}\)</span></td>
 <td></td>
-<td>是</td>
-<td>否</td>
 </tr>
 <tr class="even">
-<td>输出反馈</td>
-<td>否</td>
+<td>阶跃函数<span class="math inline">\(sgn(x)\)</span></td>
+<td><span class="math inline">\(sgn(x)=\begin{cases}1, &amp; x \geq 0
+\\0, &amp; x &lt; 0\end{cases}\)</span></td>
 <td></td>
-<td>是</td>
-<td>否</td>
 </tr>
 <tr class="odd">
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td><span class="math inline">\(Sigmoid\)</span>函数</td>
+<td><span
+class="math inline">\(Sigmoid(x)=\frac{1}{1+e^{-x}}\)</span></td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h6 id="状态反馈极点配置的提法">状态反馈极点配置的提法</h6>
-<p>连续时间线性时不变系统<span
-class="math inline">\(\dot{x}=Ax+Bu\)</span></p>
-<p>给定<strong><span
-class="math inline">\(n\)</span>个期望闭环极点</strong>（即特征值）<span
-class="math inline">\({\lambda^{*}_1，\lambda^{*}_2，···，\lambda^{*}_n}\)</span>，试确定状态反馈矩阵<span
-class="math inline">\(K\)</span>，使得所得到的状态反馈闭环控制系统</p>
-<p><span class="math inline">\(\dot{x}=(A-BK)x+Bv\)</span></p>
-<p>的特征值配置到期望极点处，即满足<span
-class="math inline">\(\lambda_i(A-BK)=\lambda_i^{*}，i=1，2，3，···，n\)</span></p>
-<p>注：状态反馈<span
-class="math inline">\(K\)</span>不能改变不能控部分的极点，但能任意配置能控部分的极点</p>
-<h5 id="单输入系统状态反馈极点配置">2.2 单输入系统状态反馈极点配置</h5>
-<h6 id="利用状态反馈的极点可配置条件">2.2.1
-利用状态反馈的极点可配置条件</h6>
-<p>结论1：利用<strong>状态反馈任意配置全部闭环极点</strong>（即特征值）的<strong>充分必要条件</strong>是被控系统完全能控。</p>
-<p>结论2：如果系统不能控部分特征值属于期望闭环特征值，那仍能通过状态反馈配置系统的全部闭环极点。</p>
-<p>对结论1的证明：以单输入-多输出系统来证明</p>
-<p>​ 充分性(系统完全能控<span
-class="math inline">\(=&gt;\)</span>​状态反馈可任意配置闭环极点)证明：</p>
-<p>​ 设系统<span class="math inline">\((A,b)\)</span>的特征多项式为：
-<span class="math display">\[
-\alpha(s)=det(sI-A)=s^n+\alpha_{n-1}^{n-1}s^{n-1}+···+\alpha_0
-\]</span> ​ 如果系统完全能控，则可通过非奇异线性变换<span
-class="math inline">\(\overline{x}=P^{-1}x\)</span>（即<span
-class="math inline">\(x=\overline{x}P\)</span>），将其变换为可控标准型：
-<span class="math display">\[
-\dot{\overline{x}}=\overline{A}\overline{x}+\overline{b}u
+<h4 id="线性可分">线性可分</h4>
+<h5
+id="输入神经元数为二进行逻辑运算">输入神经元数为二，进行逻辑运算</h5>
+<p>与、或、非为线性可分的问题，异或是非线性可分问题。</p>
+<p>(1)与运算</p>
+<figure>
+<img src="./assets/与示意图.png" srcset="/img/loading.gif" lazyload alt="与示意图" />
+<figcaption aria-hidden="true">与示意图</figcaption>
+</figure>
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(x_1\)</span></th>
+<th><span class="math inline">\(x_2\)</span></th>
+<th><span class="math inline">\(y\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>(2)或运算</p>
+<figure>
+<img src="./assets/或示意图.png" srcset="/img/loading.gif" lazyload alt="或示意图" />
+<figcaption aria-hidden="true">或示意图</figcaption>
+</figure>
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(x_1\)</span></th>
+<th><span class="math inline">\(x_2\)</span></th>
+<th><span class="math inline">\(y\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>(3)非运算</p>
+<figure>
+<img src="./assets/非示意图.png" srcset="/img/loading.gif" lazyload alt="非示意图" />
+<figcaption aria-hidden="true">非示意图</figcaption>
+</figure>
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(x_1\)</span></th>
+<th><span class="math inline">\(x_2\)</span></th>
+<th><span class="math inline">\(y\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td></td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>(4)异或运算</p>
+<figure>
+<img src="./assets/异或示意图.png" srcset="/img/loading.gif" lazyload alt="异或示意图" />
+<figcaption aria-hidden="true">异或示意图</figcaption>
+</figure>
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(x_1\)</span></th>
+<th><span class="math inline">\(x_2\)</span></th>
+<th><span class="math inline">\(y\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>无法找到一条直线去分开这两类点</p>
+<h4 id="损失函数cost-function">损失函数(cost function)</h4>
+<p>以选用符号函数<span
+class="math inline">\(sign(x)\)</span>作为激活函数来分析</p>
+<h5 id="数据点到超平面的距离">数据点到超平面的距离</h5>
+<p>首先考虑三维空间中点<span
+class="math inline">\((x_0,y_0,z_0)\)</span>到某平面<span
+class="math inline">\(c_1x+c_2y+c_3z+c_4=0\)</span>的距离<span
+class="math inline">\(d\)</span>公式： <span class="math display">\[
+d=\frac{\vert c_1x_0+c_2y_0+c_3z_0+c_4 \vert}{\sqrt{c_1^2+c_2^2+c_3^2}}
+\]</span> 再考虑输入变量<span
+class="math inline">\(x_i\)</span>到超平面<span class="math inline">\(w
+\cdot x+b=0\)</span>的距离公式: <span class="math display">\[
+d=\frac{\vert w \cdot x_i + b \vert}{\Vert w \Vert}
+\]</span> 由于选用了符号函数作为激活函数，可以得到误分类的数据<span
+class="math inline">\((x_i),y_i)\)</span>满足下列关系: <span
+class="math display">\[
+-y_i(w \cdot x_i+b)&gt;0\\
 \]</span></p>
 <p><span class="math display">\[
 \begin{equation}
-\overline{A}=
-\begin{bmatrix}
-    0 &amp; 1 &amp; 0 &amp; \dots &amp; 0 \\
-    0 &amp; 0 &amp; 1 &amp; \ddots &amp; \vdots \\
-    \vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; 0 \\
-    0 &amp; 0 &amp; \dots &amp; 0 &amp; 1\\
-    -a_0 &amp; -a_1 &amp; -a_2 &amp;\dots &amp; -a_{n-1}
-\end{bmatrix};
-\overline{b}=P^{-1}b=
-\begin{bmatrix}
-0\\
-0\\
-\vdots\\
-0\\
-1
-\end{bmatrix}
+\begin{split}
+-y_i(w \cdot x_i+b) &amp;=\vert w \cdot x_i + b \vert
+\end{split}
 \end{equation}
 \]</span></p>
-<p>​ 矩阵<span
-class="math inline">\(\overline{A}\)</span>对应的特征多项式(非奇异线性变换不改变原系统的特性)：
+<p>其中<span class="math inline">\(y_i\)</span>代表<span
+class="math inline">\(x_i\)</span>的真实类别。</p>
+<p>可以得到样本点<span class="math inline">\(x_i\)</span>到超平面的距离:
 <span class="math display">\[
-det[sI-\overline{A}]=det[sI-A]=s^n+a_{n-1}s^{n-1}+\dots+a_1s+a_0
-\]</span> ​ 设状态反馈矩阵： <span class="math display">\[
-\overline{k}=
-\begin{bmatrix}
-\overline{k}_1 &amp; \dots &amp; \overline{k}_n
-\end{bmatrix}
-\]</span> ​ 引入状态反馈后，闭环系统的状态方程为： <span
+d=\frac{-y_i(w \cdot x_i+b)}{\Vert w \Vert}
+\]</span>
+由不等式(5)判断出误分类点之后，可以得到一个由误分类点组成的集合<span
+class="math inline">\(M\)</span>，所有误分类点到超平面的总距离: <span
 class="math display">\[
-\dot{x}=(\overline{A}-\overline{b}K)x+\overline{b}v
-\]</span> ​ 引入状态反馈后，<span
-class="math inline">\((\overline{A}-\overline{b}K)\)</span>的特征多项式为：
-<span class="math display">\[
-det[sI-(\overline{A}-\overline{b}K)]=s^n+(a_{n-1}+\overline{k}_n)s^{n-1}+\dots+(a_{1-1}+\overline{k}_2)s+(a_{0}+\overline{k}_1)
-\tag{1}
-\]</span> ​ 设期望的闭环系统特征值为<span
-class="math inline">\(\lambda_1^*、\lambda_2^*、\dots、\lambda_{n}^*\)</span></p>
-<p>​ 由期望闭环特征系统特征值确定的特征多项式： <span
-class="math display">\[
+d_{\sum}=-\frac{1}{\Vert w \Vert}\sum_{x_i \in M}y_i(w \cdot x_i+b)
+\]</span></p>
+<h5 id="优化目标">优化目标</h5>
+<p>下列为感知机的损失函数: <span class="math display">\[
+L(w,b)=-\sum_{x_i \in M}y_i(w \cdot x_i+b)
+\]</span> 去掉公式(8)的<span class="math inline">\(\frac{1}{\Vert w
+\Vert}\)</span>的几种解释：</p>
+<p>(1)希望使得误分类点到超平面的总距离合尽可能小，达到0最好，没有误分类点更好，所以在优化时，可以去掉公式(8)的<span
+class="math inline">\(\frac{1}{\Vert w \Vert}\)</span>。</p>
+<p>(2)<span class="math inline">\(\frac{1}{\Vert w
+\Vert}\)</span>不影响对样本点是否被误分类的判断。</p>
+<p><strong>优化目标</strong>是使得损失函数尽可能小。找到参数<span
+class="math inline">\(w\)</span>合<span
+class="math inline">\(b\)</span>满足: <span class="math display">\[
 \begin{equation}
 \begin{split}
-D(s)&amp;=(s-\lambda_1^*)(s-\lambda_2^*)\dots(s-\lambda_n^*)\\&amp;=s^n+a^*_{n-1}s^{n-1}+\dots+a^*_1s+a^*_0
+\underset {w,b}{L(w,b)}
 \end{split}
-\end{equation} \tag{2}
-\]</span> ​ 比较公式(1)和公式(2)可得： <span class="math display">\[
-\begin{equation}
-\left\{
-             \begin{array}{lr}
-             a_{n-1}+\overline{k}_n=a^*_{n-1}, &amp;  \\
-             \dots\\
-             a_{1}+\overline{k}_2=a^*_{1}, &amp;  \\
-             a_{0}+\overline{k}_1=a^*_{0}
-             \end{array}
-\right.
 \end{equation}
-\]</span> ​ 可解得： <span class="math display">\[
+\]</span></p>
+<h4 id="学习算法">学习算法</h4>
+<h5 id="原始形式">原始形式</h5>
+<p>因为感知机学习是误分类驱动，不能使用全体样本进行梯度下降，下面是<strong>使用随机梯度下降法(Stochastic
+Gradient Descent，SGD)</strong>的介绍。</p>
+<p>损失函数<span class="math inline">\(L(w,b)\)</span>对<span
+class="math inline">\(w\)</span>求梯度: <span class="math display">\[
+\nabla_w L(w,b)=-\sum_{x_i \in M}y_i\cdot x_i
+\]</span> 注意其中<span
+class="math inline">\(x_i\)</span>代表的是特征向量，不是一个数值。</p>
+<p>损失函数<span class="math inline">\(L(w,b)\)</span>对<span
+class="math inline">\(b\)</span>求梯度: <span class="math display">\[
+\nabla_b L(w,b)=-\sum_{x_i \in M}y_i
+\]</span> 随 机选取一个误分类点<span
+class="math inline">\((x_i,y_i)\)</span>，对<span
+class="math inline">\(w\)</span>和<span
+class="math inline">\(b\)</span>进行更新: <span class="math display">\[
+w \leftarrow w-\eta(-y_i\cdot x_i)=w+\eta(y_i\cdot x_i)\\
+b \leftarrow b-\eta(-y_i)=b+\eta(y_i)
+\]</span></p>
+<h5 id="对偶形式">对偶形式</h5>
+<p>设误分类点<span class="math inline">\((x_i,y_i)\)</span>，假设<span
+class="math inline">\(w\)</span>和<span
+class="math inline">\(b\)</span>初始为<span
+class="math inline">\(0\)</span>向量</p>
+<p>一个分类点迭代<span class="math inline">\(n_i\)</span>次之后，<span
+class="math inline">\(w\)</span>的增量：<span
+class="math inline">\(n_i\eta y_i x_i=\alpha_i y_i  x_i\)</span></p>
+<p>一个分类点迭代<span class="math inline">\(n_i\)</span>次之后，<span
+class="math inline">\(b\)</span>的增量：<span
+class="math inline">\(n_i\eta y_i=\alpha_i y_i\)</span></p>
+<p>其中，<span class="math inline">\(\alpha_i=n_i \eta\)</span></p>
+<p>由第二部分的定义说明，训练数据集中一共有<span
+class="math inline">\(m\)</span>个样本点，故最后学习到的<span
+class="math inline">\(w\)</span>和<span
+class="math inline">\(b\)</span>如下： <span class="math display">\[
 \begin{equation}
-\left\{
-             \begin{array}{lr}
-             \overline{k}_n=a^*_{n-1}-a_{n-1}, &amp;  \\
-             \dots\\
-             \overline{k}_2=a^*_{1}-a_{1}, &amp;  \\
-             \overline{k}_1=a^*_{0}-a_{0}
-             \end{array}
-\right.
+\begin{split}
+w&amp;=\sum_{i=1}^{m}{\alpha_iy_i x_i}\\
+b&amp;=\sum_{i=1}^{m}{\alpha_iy_i}
+\end{split}
 \end{equation}
-\]</span> ​ 故状态反馈阵为： <span class="math display">\[
-\overline{k}=
-\begin{bmatrix}
-a^*_0-a_0 &amp; a^*_1a_1 &amp; \dots &amp; a^*_{n-1}-a_{n-1}  
-\end{bmatrix}
-\]</span> ​ 对于原系统来说引入状态反馈可得到： <span
+\]</span> 将公式(14)代入公式(1)得感知机对偶形式： <span
 class="math display">\[
-u=v-kx=v-kP\overline{x}=v-\overline{k}\overline{x}
-\]</span> ​ 即对于原系统使得闭环极点配置到<span
-class="math inline">\(\lambda_1^*、\lambda_2^*、\dots、\lambda_{n}^*\)</span>的状态反馈矩阵：
-<span class="math display">\[
-k=\overline{k}P^{-1}
-\]</span> ​ 必要性(状态反馈可任意配置闭环极点<span
-class="math inline">\(=&gt;\)</span>系统完全能控)证明：</p>
-<p>​ 反证法：反设系统不完全能控，则不能控部分的状态不受输入<span
-class="math inline">\(u\)</span>的影响与控制，引入状态反馈就不能通过控制<span
-class="math inline">\(k\)</span>来改变不可控极点</p>
-<h5 id="单输入系统的极点配置算法">2.3 单输入系统的极点配置算法</h5>
-<p>对给定<span class="math inline">\(n\)</span>维受控系统<span
-class="math inline">\((A,b)\)</span>和一组任意期望闭环特征值<span
-class="math inline">\(\lambda_1^*、\lambda_2^*、\dots、\lambda_{n}^*\)</span>，确定反馈增益矩阵<span
-class="math inline">\(k\)</span>，使得闭环系统矩阵<span
-class="math inline">\((A-bk)\)</span>的特征值为<span
-class="math inline">\(\lambda_1^*、\lambda_2^*、\dots、\lambda_{n}^*\)</span></p>
-<h6 id="系数比较法">2.3.1 系数比较法</h6>
+f(x)=f(\sum_{i=1}^{m}{\alpha_i y_i x_i \cdot x+b})
+\]</span></p>
+<p>其中<span
+class="math inline">\(\alpha=(\alpha_1,\alpha_2,\dots,\alpha_m)^T\)</span></p>
 <table>
 
 <thead>
 <tr class="header">
-<th>步骤</th>
-<th>关键公式</th>
+<th>对偶形式的算法流程：</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>(1)计算期望特征多项式</td>
-<td><span
-class="math inline">\(\alpha^*(s)=(s-\lambda^*_1)\dots(s-\lambda^*_n)\\=(s^n+\alpha^*_{n-1}s^{n-1}+\dots+\alpha^*_1s+\alpha^*_0)\)</span></td>
+<td>输入：训练数据集<span
+class="math inline">\(D=\{(x_1,y_1),\dots,(x_m,y_m)\}\)</span>，学习率<span
+class="math inline">\(\eta\)</span></td>
 </tr>
 <tr class="even">
-<td>(2)设<span class="math inline">\(k=\begin{bmatrix}k_1 &amp; k_2
-&amp;\dots
-&amp;k_n\end{bmatrix}\)</span>，用待定系数表示闭环系统的特征多项式</td>
-<td><span
-class="math inline">\(alpha^(s)=det(sI-A+bk)\\=(s^n+\alpha_{n-1}s^{n-1}+\dots+\alpha_1s+\alpha_0)\)</span></td>
+<td>(1)<span class="math inline">\(\alpha \leftarrow 0\)</span>,<span
+class="math inline">\(b \leftarrow 0\)</span></td>
 </tr>
 <tr class="odd">
-<td>(3)由上述两式得到方程组，解方程得到<span
-class="math inline">\(k\)</span>矩阵中的元素</td>
-<td><span
-class="math inline">\(\begin{equation}\left\{           \begin{array}{lr}            a_{n-1}=a^*_{n-1},
-&amp;  \\             \dots\\           a_{1}=a^*_{1},
-&amp;  \\             a_{0}+=a^*_{0}           \end{array}\right.\end{equation}\)</span></td>
+<td>(2)训练集中选择<span class="math inline">\((x_j,y_j)\)</span></td>
+</tr>
+<tr class="even">
+<td>(3)if $y_j(_{i=1}^{m}{_i y_i x_i x_j+b}) $<br /> <span
+class="math inline">\(\alpha_j \leftarrow \alpha_j+1\)</span>,<span
+class="math inline">\(b \leftarrow b+y_j\)</span></td>
+</tr>
+<tr class="odd">
+<td>(4)转到(2)直到无误分类</td>
 </tr>
 </tbody>
 </table>
-<p>2.3.2 完全能控单输入系统状态反馈极点配置的规范算法</p>
-<table>
-
-<thead>
-<tr class="header">
-<th>步骤</th>
-<th>关键公式</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>(1)计算矩阵A的特征多项式</td>
-<td><span
-class="math inline">\(\alpha(s)=det(sI-A)\\=(s^n+\alpha_{n-1}s^{n-1}+\dots+\alpha_1s+\alpha_0)\)</span></td>
-</tr>
-<tr class="even">
-<td>(2)计算期望特征多项式</td>
-<td><span
-class="math inline">\(\alpha^*(s)=(s-\lambda^*_1)\dots(s-\lambda^*_n)\\=(s^n+\alpha^*_{n-1}s^{n-1}+\dots+\alpha^*_1s+\alpha^*_0)\)</span></td>
-</tr>
-<tr class="odd">
-<td>(3)计算能控规范型反馈矩阵<span
-class="math inline">\(\overline{k}\)</span></td>
-<td><span
-class="math inline">\(k=\begin{bmatrix}\alpha^*_0-\alpha_0&amp;\alpha^*_1-\alpha_1&amp;\dots&amp;\alpha^*_{n-1}-\alpha_{n-1}\end{bmatrix}\)</span></td>
-</tr>
-<tr class="even">
-<td>(4)计算非奇异变换矩阵<span class="math inline">\(P\)</span></td>
-<td><span class="math inline">\(P=\begin{bmatrix}A^{n-1}b &amp;\dots
-&amp; Ab  &amp; b\end{bmatrix}\begin{bmatrix}1 &amp;\dots&amp;0 &amp;
-0\\\alpha_{n-1} &amp; 1 &amp; \dots &amp; 0\\\vdots &amp; \vdots &amp;
-\ddots &amp; \vdots\\\alpha_{1}&amp;\dots &amp;
-\alpha_{n-1}&amp;1\end{bmatrix}(左下三角)\\\)</span><span
-class="math inline">\(=\begin{bmatrix}b &amp; Ab &amp; \dots &amp;
-A^{n-1}b\end{bmatrix}\begin{bmatrix}1 &amp;\dots&amp;0 &amp;
-0\\\alpha_{n-1} &amp; 1 &amp; \dots &amp; 0\\\vdots &amp; \vdots &amp;
-\ddots &amp; \vdots\\\alpha_{1}&amp;\dots &amp;
-\alpha_{n-1}&amp;1\end{bmatrix}^T(左上三角)\)</span></td>
-</tr>
-<tr class="odd">
-<td>(5)计算<span class="math inline">\(P^{-1}\)</span></td>
-<td><span
-class="math inline">\(P^{-1}=\frac{adj{P}}{det(P)}\)</span></td>
-</tr>
-<tr class="even">
-<td>(6)计算原系统的反馈增益阵</td>
-<td><span class="math inline">\(k=\overline{k}P^{-1}\)</span></td>
-</tr>
-</tbody>
-</table>
-<h5 id="状态反馈堆传递函数矩阵的影响">2.3
-状态反馈堆传递函数矩阵的影响</h5>
-<p>结论：</p>
-<table style="width:100%;">
-
-<thead>
-<tr class="header">
-<th>系统</th>
-<th>结论</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>单输入单输出线性定常系统</td>
-<td>结论： 对<strong>完全能控</strong><span
-class="math inline">\(n\)</span>维<strong>单输入单输出线性时不变系统</strong>，引入状态反馈任意配置闭环系统传递函数极点的同时，<strong>零点一般不发生改变</strong>（如果状态反馈将<strong>闭环系统极点配置为与零点相重合</strong>，会产生<strong>对消</strong>零点的情况）</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>多输入多输出线性定常系统</td>
-<td>结论：对<strong>完全能控的多输入多输出线性定常系统</strong>，<strong>状态反馈</strong>在<strong>配置</strong>传递函数矩阵<strong>全部<span
-class="math inline">\(n\)</span>个极点</strong>的同时，<strong>一般不影响传递函数的零点</strong></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<h3 id="参考">参考</h3>
+<p>1、《统计学习方法》</p>
+<p>2、《机器学习》</p>
 
                 
               </div>
@@ -659,15 +657,8 @@ class="math inline">\(n\)</span>个极点</strong>的同时，<strong>一般不�
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/" class="category-chain-item">控制理论</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/%E7%8E%B0%E4%BB%A3%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">现代控制理论学习笔记</a>
-  
-  
-
   
 
       </span>
@@ -681,11 +672,7 @@ class="math inline">\(n\)</span>个极点</strong>的同时，<strong>一般不�
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%8E%B0%E4%BB%A3%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/" class="print-no-link">#现代控制理论</a>
-      
-        <a href="/tags/%E7%8A%B6%E6%80%81%E5%8F%8D%E9%A6%88/" class="print-no-link">#状态反馈</a>
-      
-        <a href="/tags/%E6%9E%81%E7%82%B9%E9%85%8D%E7%BD%AE/" class="print-no-link">#极点配置</a>
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%EF%BC%8C%E6%84%9F%E7%9F%A5%E6%9C%BA/" class="print-no-link">#机器学习，感知机</a>
       
     </div>
   
@@ -697,8 +684,8 @@ class="math inline">\(n\)</span>个极点</strong>的同时，<strong>一般不�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>状态反馈和极点配置知识点总结</div>
-      <div>http://example.com/2024/05/17/状态反馈和极点配置总结/</div>
+      <div>感知机(perceptron)学习笔记</div>
+      <div>http://example.com/2024/11/28/感知机/</div>
     </div>
     <div class="license-meta">
       
@@ -710,7 +697,7 @@ class="math inline">\(n\)</span>个极点</strong>的同时，<strong>一般不�
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>May 17, 2024</div>
+          <div>November 28, 2024</div>
         </div>
       
       
@@ -742,9 +729,9 @@ class="math inline">\(n\)</span>个极点</strong>的同时，<strong>一般不�
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/05/17/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" title="Linux下配置强化学习环境">
+                      <a href="/2024/11/28/KNN%E7%AE%97%E6%B3%95/" title="KNN(k-Nearest Neighbor，K近邻)学习笔记">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Linux下配置强化学习环境</span>
+                        <span class="hidden-mobile">KNN(k-Nearest Neighbor，K近邻)学习笔记</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -752,8 +739,8 @@ class="math inline">\(n\)</span>个极点</strong>的同时，<strong>一般不�
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/05/17/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5/" title="坐标变换旋转矩阵、四元数反解欧拉角公式推导">
-                        <span class="hidden-mobile">坐标变换旋转矩阵、四元数反解欧拉角公式推导</span>
+                      <a href="/2024/11/28/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" title="线性回归(linear regression)学习笔记">
+                        <span class="hidden-mobile">线性回归(linear regression)学习笔记</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
