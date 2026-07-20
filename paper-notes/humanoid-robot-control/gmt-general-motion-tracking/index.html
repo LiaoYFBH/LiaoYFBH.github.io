@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GMT: General Motion Tracking · 论文阅读笔记</title><meta name="description" content="GMT: General Motion Tracking 论文阅读笔记">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
+<style>:root{--ink:#17211f;--muted:#65716c;--line:#d9d5cb;--paper:#fbfaf6;--teal:#285b55;--rust:#a84e31}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--paper);font-family:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8}header{border-bottom:1px solid var(--line);background:#fffefa}header nav{max-width:1180px;margin:auto;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}header a{color:var(--teal);text-decoration:none;font-weight:700}.layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,780px) 250px;gap:64px;padding:60px 28px 100px}.eyebrow{color:var(--rust);font-size:12px;font-weight:800;letter-spacing:.12em}.article-title{font:700 clamp(30px,5vw,48px)/1.2 Georgia,"Noto Serif SC",serif;margin:10px 0 14px}.meta{color:var(--muted);font-size:13px;margin-bottom:42px}article h1,article h2,article h3,article h4{scroll-margin-top:24px;font-family:Georgia,"Noto Serif SC",serif;line-height:1.35}article h1{font-size:30px;margin-top:52px}article h2{font-size:25px;margin-top:46px;padding-bottom:9px;border-bottom:1px solid var(--line)}article h3{font-size:20px;margin-top:34px}article p,article li{font-size:16px}article img{display:block;max-width:100%;height:auto;margin:28px auto;border:1px solid var(--line)}article pre{overflow:auto;padding:18px;background:#18221f;color:#f8f5ed;border-radius:4px}article code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}article :not(pre)>code{padding:2px 5px;background:#ebe8df;color:#7f351f}article blockquote{margin:24px 0;padding:2px 18px;border-left:3px solid var(--rust);color:#4d5a55}article table{width:100%;border-collapse:collapse;display:block;overflow:auto}article th,article td{border:1px solid var(--line);padding:8px 12px}article a{color:var(--teal)}.katex-display{overflow:auto;padding:8px 0}.toc{position:sticky;top:24px;align-self:start;border-left:1px solid var(--line);padding-left:20px}.toc b{display:block;margin-bottom:12px}.toc a{display:block;color:var(--muted);font-size:13px;line-height:1.5;text-decoration:none;padding:5px 0}.toc a[data-level="3"]{padding-left:12px}.toc a:hover{color:var(--rust)}@media(max-width:820px){.layout{grid-template-columns:1fr;padding-top:38px}.toc{display:none}}</style></head>
+<body><header><nav><a href="/">yf-personal-homepage</a><a href="../../">论文阅读笔记</a></nav></header>
+<div class="layout"><main><div class="eyebrow">HUMANOID ROBOT CONTROL · PAPER NOTES</div><h1 class="article-title">GMT: General Motion Tracking</h1><div class="meta">更新于 2026/7/20</div><article id="article"><h1>GMT：General Motion Tracking for Humanoid Whole-Body Control</h1>
+<blockquote>
+<p>**一句话概括：**这篇论文为了解决“大规模、多类型人体动作难以由一个统一机器人策略稳定跟踪”的问题，提出了由 <strong>Adaptive Sampling</strong> 和 <strong>Motion Mixture-of-Experts</strong> 组成的 GMT 框架，核心是将训练资源集中到困难动作，并让不同专家分别建模不同运动模式，最终在 Unitree G1 上用单一策略实现多种全身动作跟踪。</p>
+</blockquote>
+<h2>论文信息</h2>
+<ul>
+<li>**论文：**GMT: General Motion Tracking for Humanoid Whole-Body Control</li>
+<li>**作者：**Zixuan Chen、Mazeyu Ji、Xuxin Cheng、Xuanbin Peng、Xue Bin Peng、Xiaolong Wang</li>
+<li>**会议：**IEEE/RSJ International Conference on Intelligent Robots and Systems，IROS 2026</li>
+<li>**预印本：**arXiv:2506.14770，2025 年 6 月首次提交，2025 年 9 月更新 v2</li>
+<li>**论文链接：**arXiv 论文页面</li>
+<li>**代码链接：**官方 GitHub 仓库</li>
+<li>**阅读日期：**2026 年 7 月 20 日</li>
+<li>**关键词：**Humanoid、Motion Tracking、Motion Imitation、Adaptive Sampling、Mixture-of-Experts、Teacher-Student、DAgger</li>
+</ul>
+<hr>
+<h2>1. 这篇论文在解决什么问题？</h2>
+<h3>研究背景</h3>
+<p>人形机器人运动控制的一条重要技术路线，是把人体动作重定向到机器人上，再通过强化学习训练机器人跟踪这些参考动作。</p>
+<p>当训练数据只有一两个动作时，普通 MLP 策略往往就能完成跟踪；但当动作规模扩展到数千条，且同时包括走路、跑步、下蹲、踢腿、跳舞、拳击等差异明显的技能时，希望用一个策略覆盖所有动作会变得非常困难。</p>
+<p>GMT 的目标不是训练某一个特定技能，而是训练一个可以跟踪大量不同动作的<strong>统一全身运动控制器</strong>。</p>
+<h3>现有方法的问题</h3>
+<p>现有方法通常采用：</p>
+<blockquote>
+<p>从动作数据集中采样一条参考 Motion，通过姿态、速度和关键身体位置等奖励，使用 PPO 训练一个 Motion Tracking 策略。</p>
+</blockquote>
+<p>但当数据规模扩大后，会出现四类问题。</p>
+<h4>1. 动作数据分布严重不均衡</h4>
+<p>AMASS 等大型数据集里，走路、站立和原地小动作很多，而踢腿、跳跃等困难动作很少。</p>
+<p>使用普通均匀采样时，大部分训练样本会被简单动作占据；困难动作不仅数量少，而且策略经常在困难片段开始后迅速失败，导致真正有效的训练数据更少。</p>
+<h4>2. 长 Motion 中的困难片段容易被淹没</h4>
+<p>一条长 Motion 可能包含：</p>
+<pre><code class="language-text">站立 → 走路 → 转身 → 踢腿 → 恢复站立
+</code></pre>
+<p>策略可能已经学会前面的站立和走路，却始终学不会中间两秒的踢腿。</p>
+<p>如果每次仍从整段 Motion 中采样，那么大量训练时间会重复花在已经掌握的简单片段上。</p>
+<h4>3. 单个 MLP 容量不足</h4>
+<p>不同动作对应不同的动力学模式。例如：</p>
+<ul>
+<li>走路需要周期性步态；</li>
+<li>高踢腿需要单脚支撑和平衡；</li>
+<li>深蹲需要大幅降低质心；</li>
+<li>拳击主要依赖上半身快速运动。</li>
+</ul>
+<p>让一个普通 MLP 用完全相同的参数表示所有动作，容易产生参数冲突和平均化行为。</p>
+<h4>4. 真实机器人存在部分可观测性</h4>
+<p>仿真中的特权策略可以获得基座线速度、全局位置等状态，但这些信息在真实机器人上通常无法准确测量。</p>
+<p>因此，直接部署特权策略并不现实，需要进一步训练只依赖机器人可观测信息的学生策略。</p>
+<h3>论文目标</h3>
+<p>这篇论文希望解决的核心问题是：</p>
+<blockquote>
+<p>如何从大规模、类别不均衡的 Motion 数据中，训练一个容量足够、能够覆盖多种动作，并且可以部署到真实机器人的统一 Motion Tracking 策略。</p>
+</blockquote>
+<p>需要注意，GMT 解决的是<strong>大规模通用 Motion Tracking</strong>，而不是专门解决后空翻、起身或地面翻滚等极限动作。</p>
+<hr>
+<h2>2. 论文的核心思路</h2>
+<p>作者的关键观察是：</p>
+<blockquote>
+<p>大规模 Motion Tracking 失败，不仅是奖励函数或 PPO 参数的问题，还来自训练样本分配不合理，以及单一网络容量不足。</p>
+</blockquote>
+<p>因此，作者提出两个核心模块：</p>
+<ol>
+<li>**Adaptive Sampling：**增加困难动作和困难片段的训练概率。</li>
+<li>**Motion Mixture-of-Experts：**使用多个专家网络分别表示不同运动区域，由门控网络动态组合专家输出。</li>
+</ol>
+<p>同时，GMT 使用：</p>
+<ul>
+<li>特权教师策略；</li>
+<li>DAgger 学生蒸馏；</li>
+<li>当前下一帧和未来约两秒的 Motion 信息；</li>
+<li>数据筛选和 Sim-to-Real 随机化。</li>
+</ul>
+<p>用一句更直白的话解释：</p>
+<blockquote>
+<p>传统方法是让一个普通网络，从整个动作库里较平均地学习所有动作；GMT 则是让训练器主动多练不会的动作，并让多个专家分担不同类型的运动控制。</p>
+</blockquote>
+<h3>GMT 与普通 Mimic 的关系</h3>
+<p>GMT 本质上仍然属于 <strong>reference-based motion tracking，也就是 Mimic 路线</strong>。</p>
+<p>它仍然需要明确的参考 Motion，并使用参考姿态、速度和关键身体位置构造 Tracking Reward。它没有使用 AMP 中的判别器，也没有让策略只通过“像不像人类动作”来学习。</p>
+<p>因此可以将它理解为：</p>
+<pre><code class="language-text">普通 Mimic
+  + 大规模困难动作采样机制
+  + 更高容量的 MoE 策略
+  + 未来参考轨迹编码
+  + Teacher-Student 部署体系
+  = GMT
+</code></pre>
+<p>它不是取代 Mimic，而是在解决：</p>
+<blockquote>
+<p>当 Mimic 从一两个动作扩展到数千个动作时，应该怎样采样、怎样增加模型容量、怎样完成真实部署。</p>
+</blockquote>
+<h3>核心贡献</h3>
+<ol>
+<li>提出 Adaptive Sampling，根据动作掌握程度和跟踪误差，动态调整 Motion 的采样概率。</li>
+<li>提出 Motion MoE，使多个专家分别建模不同运动模式，提高统一策略的表达能力。</li>
+<li>结合未来 Motion 编码、教师—学生训练和数据筛选，在真实 Unitree G1 上实现统一的多动作跟踪策略。</li>
+</ol>
+<p>其中，最重要的创新是：</p>
+<blockquote>
+<p><strong>Adaptive Sampling 和 Motion MoE 的组合：前者解决训练数据分配问题，后者解决策略容量问题。</strong></p>
+</blockquote>
+<hr>
+<h2>3. 方法介绍</h2>
+<h3>整体流程</h3>
+<p><img src="./images/01-___2026-07-20_16-14-09.png" alt="截图 2026-07-20 16-14-09.png"></p>
+<pre><code class="language-text">AMASS + LAFAN1 人体动作
+          ↓
+规则筛选 + 初步策略筛选
+          ↓
+人体动作重定向到机器人
+          ↓
+Random Clipping
+          ↓
+Adaptive Sampling 选择训练片段
+          ↓
+PPO 训练带特权信息的 MoE Teacher
+          ↓
+DAgger 蒸馏 Student Policy
+          ↓
+MuJoCo 验证
+          ↓
+部署到真实 Unitree G1
+</code></pre>
+<p>具体流程如下：</p>
+<ol>
+<li>从 AMASS 和 LAFAN1 中收集人体动作。</li>
+<li>去除机器人明显无法执行的动作。</li>
+<li>将长 Motion 随机裁剪成不超过 10 秒的子片段。</li>
+<li>根据每个片段的完成情况动态调整采样概率。</li>
+<li>使用 PPO 训练能够获得特权状态的 MoE 教师策略。</li>
+<li>使用 DAgger，让学生策略模仿教师动作。</li>
+<li>将学生策略部署到真实机器人。</li>
+</ol>
+<h3>核心模块 A：Adaptive Sampling</h3>
+<ul>
+<li>**输入：**所有 Motion 子片段、每个片段的完成等级、历史最大跟踪误差。</li>
+<li>**输出：**各个 Motion 子片段下一轮被采样的概率。</li>
+<li>**作用：**减少已经掌握的简单动作训练次数，增加困难动作和高误差片段的训练次数。</li>
+<li>**为什么需要：**普通均匀采样无法保证有限训练资源真正覆盖困难动作。</li>
+</ul>
+<p>Adaptive Sampling 包含两部分。</p>
+<h4>Random Clipping</h4>
+<p>超过 10 秒的 Motion 会被切分为多个子片段，并在切分位置上加入随机偏移。训练过程中还会定期重新切分。</p>
+<p>它的意义不是简单缩短 Motion，而是让一条长 Motion 中不同局部阶段都有机会成为相对独立的训练单元。</p>
+<p>例如：</p>
+<pre><code class="language-text">原始 Motion：
+站立 ─ 走路 ─ 踢腿 ─ 转身 ─ 站立
+
+第一次裁剪：
+[站立─走路] [走路─踢腿] [转身─站立]
+
+重新裁剪：
+[站立─走路─踢腿] [踢腿─转身] [转身─站立]
+</code></pre>
+<p>这样可以降低困难动作始终被简单前置片段淹没的问题。</p>
+<h4>基于跟踪性能的采样</h4>
+<p>每个 Motion 子片段都有一个训练难度或完成等级。策略成功完成后，该片段会逐渐进入更严格的跟踪要求；已经达到最高完成等级的片段，则根据剩余最大跟踪误差决定是否继续被重点采样。</p>
+<p>其基本形式可以写为：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>s</mi><mi>i</mi></msub><mrow><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>s</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">p_i=\frac{s_i}{\sum_j s_j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2294em;vertical-align:-1.1218em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4358em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1218em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+<p>其中：</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">s_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> 个 Motion 的采样分数；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">p_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是对应的采样概率；</li>
+<li>未掌握的 Motion 根据课程等级获得较高分数；</li>
+<li>已经基本掌握的 Motion 根据残余跟踪误差获得分数。</li>
+</ul>
+<p>直觉上就是：</p>
+<blockquote>
+<p>先保证每个动作都能完成，再集中优化那些虽然能完成、但跟踪质量仍然较差的动作。</p>
+</blockquote>
+<p>论文实验显示，该采样机制对困难 Motion 的改善比对简单 Motion 更明显。</p>
+<hr>
+<h3>核心模块 B：Motion Mixture-of-Experts</h3>
+<ul>
+<li>**输入：**机器人状态和目标 Motion 信息。</li>
+<li>**输出：**目标关节位置动作。</li>
+<li>**作用：**让不同专家分别学习不同运动模式。</li>
+<li>**为什么需要：**单个 MLP 难以同时表示大量差异显著的动作。</li>
+</ul>
+<p>GMT 使用 Soft Mixture-of-Experts。假设一共有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span> 个专家：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>a</mi><mi>t</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>p</mi><mi>i</mi></msub><msubsup><mi>a</mi><mi>t</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><annotation encoding="application/x-tex">a_t=\sum_{i=1}^{N}p_i a_t^{(i)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.106em;vertical-align:-1.2777em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.4542em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2458em;"><span></span></span></span></span></span></span></span></span></span></span>
+<p>其中：</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>a</mi><mi>t</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><annotation encoding="application/x-tex">a_t^{(i)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2906em;vertical-align:-0.2458em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.4542em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2458em;"><span></span></span></span></span></span></span></span></span></span> 是第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> 个专家输出的动作；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">p_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是门控网络分配给第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> 个专家的权重；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_i p_i=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0497em;vertical-align:-0.2997em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">a_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是最终发送给执行器的目标动作。</li>
+</ul>
+<p>这不是“从多个专家中硬选一个”，而是对所有专家输出进行加权组合。</p>
+<p>论文展示了一段由站立、踢腿、后退和再次站立组成的复合动作。随着动作阶段变化，门控权重也发生明显切换，说明不同专家确实出现了一定程度的运动阶段分工。</p>
+<p>但需要注意：</p>
+<blockquote>
+<p>论文中的 MoE 主要用于训练特权教师策略；最终可部署的学生策略通过 DAgger 模仿教师，不应简单理解为真实机器人必须运行完整 MoE Teacher。</p>
+</blockquote>
+<hr>
+<h3>核心模块 C：未来 Motion 输入</h3>
+<p>GMT 不只给策略输入下一帧目标，还输入未来约两秒的参考 Motion。</p>
+<p>未来序列先通过卷积编码器压缩为一个 latent，再与立即需要跟踪的下一帧目标拼接：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub><mo>=</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">v</mi></mrow></msub><mrow><mo fence="true">(</mo><msub><mi>g</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>g</mi><mrow><mi>t</mi><mo>+</mo><mn>2</mn></mrow></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>g</mi><mrow><mi>t</mi><mo>+</mo><mi>H</mi></mrow></msub><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">z_t=f_{\mathrm{conv}}
+\left(
+g_{t+1},g_{t+2},\ldots,g_{t+H}
+\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.044em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight" style="margin-right:0.0139em;">conv</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight" style="margin-right:0.0813em;">H</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span></span>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>a</mi><mi>t</mi></msub><mo>=</mo><mi>π</mi><mrow><mo fence="true">(</mo><msub><mi>o</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>g</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>z</mi><mi>t</mi></msub><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a_t=\pi\left(o_t,g_{t+1},z_t\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">π</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.044em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span></span>
+<p>其中：</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">o_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是机器人当前观测；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">g_{t+1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.2083em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span> 是立即需要跟踪的下一帧；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">z_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.044em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是未来约两秒轨迹的压缩表示。</li>
+</ul>
+<p>未来窗口负责告诉机器人：</p>
+<blockquote>
+<p>接下来整体要做什么。</p>
+</blockquote>
+<p>立即下一帧负责告诉机器人：</p>
+<blockquote>
+<p>此刻具体应该跟到哪里。</p>
+</blockquote>
+<p>实验表明，只输入长时间未来窗口、却不单独提供下一帧，会造成明显性能下降，说明长期趋势不能代替精确的局部目标。</p>
+<hr>
+<h3>核心模块 D：Teacher-Student</h3>
+<p>第一阶段使用 PPO 训练特权教师：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>a</mi><mi>t</mi><mi>T</mi></msubsup><mo>=</mo><msub><mi>π</mi><mi>T</mi></msub><mo stretchy="false">(</mo><msub><mi>o</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>e</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>g</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_t^T=\pi_T(o_t,e_t,g_t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1383em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>
+<p>其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">e_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 表示仿真中可获得、但真实机器人难以准确获取的特权信息。</p>
+<p>第二阶段使用 DAgger 训练学生：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>=</mo><msubsup><mrow><mo fence="true">∣</mo><msub><mi>π</mi><mi>S</mi></msub><mo stretchy="false">(</mo><msub><mi>h</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>g</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>−</mo><msubsup><mi>a</mi><mi>t</mi><mi>T</mi></msubsup><mo fence="true">∣</mo></mrow><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\mathcal L_{\mathrm{student}}
+=
+
+\left|
+\pi_S(h_t,g_t)-a_t ^T
+\right|_2^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">student</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.495em;vertical-align:-0.3997em;"></span><span class="minner"><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-2.85em;"><span class="pstrut" style="height:3.2em;"></span><span style="width:0.333em;height:1.2em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.333em" height="1.2em" viewBox="0 0 333 1200"><path d="M145 15 v585 v0 v585 c2.667,10,9.667,15,21,15
+c10,0,16.667,-5,20,-15 v-585 v0 v-585 c-2.667,-10,-9.667,-15,-21,-15
+c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v0 v585 h43z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0576em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-2.85em;"><span class="pstrut" style="height:3.2em;"></span><span style="width:0.333em;height:1.2em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.333em" height="1.2em" viewBox="0 0 333 1200"><path d="M145 15 v585 v0 v585 c2.667,10,9.667,15,21,15
+c10,0,16.667,-5,20,-15 v-585 v0 v-585 c-2.667,-10,-9.667,-15,-21,-15
+c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v0 v585 h43z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0953em;"><span style="top:-2.3003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.3442em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3997em;"><span></span></span></span></span></span></span></span></span></span></span>
+<p>其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">h_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 可以包含学生可获得的观测历史。</p>
+<p>Teacher-Student 的核心作用是：</p>
+<blockquote>
+<p>教师负责利用完整状态找到高质量控制行为，学生负责把这些行为压缩为真实机器人可以执行的策略。</p>
+</blockquote>
+<p>因此，GMT 和你当前“先训练带特权信息的 Teacher，再导出 Motion 或训练非特权 Student”的总体思路是一致的。</p>
+<hr>
+<h2>4. 实验与结果</h2>
+<h3>实验设置</h3>
+<ul>
+<li>
+<p>**训练数据：**经过筛选的 AMASS 与 LAFAN1。</p>
+</li>
+<li>
+<p>**数据规模：**8,925 个 Motion clips，总时长约 33.12 小时。</p>
+</li>
+<li>
+<p>**仿真器：**Isaac Gym。</p>
+</li>
+<li>
+<p>**并行环境：**4,096。</p>
+</li>
+<li>
+<p>**训练规模：**每个策略约使用 68 亿个仿真样本。</p>
+</li>
+<li>
+<p>**机器人：**Unitree G1。</p>
+</li>
+<li>
+<p>**主要 Baseline：**重新实现并在相同数据上训练的 ExBody2。</p>
+</li>
+<li>
+<p><strong>评价指标：</strong></p>
+<ul>
+<li>MPKPE：关键身体位置误差；</li>
+<li>MPJPE：关节位置误差；</li>
+<li>线速度误差；</li>
+<li>偏航角速度误差。</li>
+</ul>
+</li>
+</ul>
+<h3>主要结果</h3>
+<p>以下为最关键的 MPKPE 结果，数值越低越好：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th align="right">AMASS-Test MPKPE / mm</th>
+<th align="right">LAFAN1 MPKPE / mm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ExBody2</td>
+<td align="right">50.28</td>
+<td align="right">58.36</td>
+</tr>
+<tr>
+<td>GMT Student</td>
+<td align="right">43.01</td>
+<td align="right">46.14</td>
+</tr>
+<tr>
+<td>GMT Privileged Teacher</td>
+<td align="right"><strong>42.07</strong></td>
+<td align="right"><strong>45.16</strong></td>
+</tr>
+</tbody>
+</table>
+<p>与 ExBody2 相比，GMT Teacher 的 MPKPE：</p>
+<ul>
+<li>在 AMASS-Test 上降低约 <strong>16.3%</strong>；</li>
+<li>在 LAFAN1 上降低约 <strong>22.6%</strong>。</li>
+</ul>
+<p>学生策略的结果与特权教师非常接近，说明 Teacher-Student 蒸馏没有造成严重的性能损失。</p>
+<p>论文还在真实 G1 上展示了：</p>
+<ul>
+<li>风格化走路；</li>
+<li>高踢腿；</li>
+<li>跳舞和旋转；</li>
+<li>蹲走；</li>
+<li>踢球；</li>
+<li>拳击、跑步和侧向移动。</li>
+</ul>
+<p>此外，GMT 还能在 MuJoCo 的 Sim-to-Sim 实验中跟踪由 MDM 文本生成模型产生的新 Motion。</p>
+<h3>消融实验</h3>
+<h4>Adaptive Sampling 和 MoE</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th align="right">AMASS MPKPE</th>
+<th align="right">LAFAN1 MPKPE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>去掉 MoE</td>
+<td align="right">43.54</td>
+<td align="right">48.26</td>
+</tr>
+<tr>
+<td>去掉 Adaptive Sampling</td>
+<td align="right">42.53</td>
+<td align="right">49.61</td>
+</tr>
+<tr>
+<td>两者都去掉</td>
+<td align="right">44.34</td>
+<td align="right">52.34</td>
+</tr>
+<tr>
+<td>完整 GMT</td>
+<td align="right"><strong>42.07</strong></td>
+<td align="right"><strong>45.16</strong></td>
+</tr>
+</tbody>
+</table>
+<p>可以看出：</p>
+<ul>
+<li>MoE 和 Adaptive Sampling 都有独立贡献；</li>
+<li>同时去掉两者时性能最差；</li>
+<li>Adaptive Sampling 在 LAFAN1 上的影响尤其明显；</li>
+<li>两个模块对于高难度 Motion 的改善比平均指标表现出的幅度更大。</li>
+</ul>
+<h4>Motion 输入窗口</h4>
+<table>
+<thead>
+<tr>
+<th>Motion 输入</th>
+<th align="right">AMASS MPKPE</th>
+<th align="right">LAFAN1 MPKPE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>仅下一帧</td>
+<td align="right">46.02</td>
+<td align="right">51.16</td>
+</tr>
+<tr>
+<td>下一帧 + 0.5 秒未来</td>
+<td align="right">43.64</td>
+<td align="right">49.87</td>
+</tr>
+<tr>
+<td>下一帧 + 1 秒未来</td>
+<td align="right">43.15</td>
+<td align="right">47.41</td>
+</tr>
+<tr>
+<td>下一帧 + 2 秒未来</td>
+<td align="right"><strong>42.07</strong></td>
+<td align="right"><strong>45.16</strong></td>
+</tr>
+<tr>
+<td>仅 2 秒未来、不提供下一帧</td>
+<td align="right">49.52</td>
+<td align="right">61.24</td>
+</tr>
+</tbody>
+</table>
+<p>该实验说明：</p>
+<ol>
+<li>更长的未来信息有助于提前准备动作。</li>
+<li>立即下一帧依然不可替代。</li>
+<li>最有效的结构是“近期精确目标 + 长期趋势信息”，而不是只选择其中一种。</li>
+</ol>
+<hr>
+<h2>5. 优点和局限</h2>
+<h3>优点</h3>
+<h4>1. 解决的是具有实际价值的系统性问题</h4>
+<p>GMT 没有只提出一个新的奖励项，而是同时处理：</p>
+<ul>
+<li>数据分布；</li>
+<li>采样效率；</li>
+<li>模型容量；</li>
+<li>时间信息；</li>
+<li>部分可观测性；</li>
+<li>Sim-to-Real。</li>
+</ul>
+<p>这使它更像一套完整的大规模 Motion Tracking 训练方案。</p>
+<h4>2. Adaptive Sampling 非常实用</h4>
+<p>很多多 Motion 训练问题并不是完全学不会，而是困难动作获得的有效训练样本太少。</p>
+<p>GMT 将长动作切分、重新切分，并根据完成程度调整采样概率，直接针对了这一问题。相比继续盲目调 PPO 参数，这种方法更容易解释，也更容易迁移到其他 Mimic 系统。</p>
+<h4>3. MoE 与任务结构相匹配</h4>
+<p>人体动作天然存在不同运动模式。用多个专家分别表示步态、踢腿、下蹲等区域，比单纯把 MLP 加宽更符合问题结构。</p>
+<h4>4. 消融实验比较完整</h4>
+<p>论文分别验证了：</p>
+<ul>
+<li>Adaptive Sampling；</li>
+<li>MoE；</li>
+<li>二者组合；</li>
+<li>不同未来窗口；</li>
+<li>下一帧输入的重要性；</li>
+<li>Teacher 与 Student 的性能差距。</li>
+</ul>
+<p>因此，能够比较清楚地判断性能究竟来自哪些设计。</p>
+<h4>5. 完成了真实机器人部署</h4>
+<p>论文不仅报告仿真误差，也展示了多种技能在真实 Unitree G1 上的执行效果，这增强了方法的工程可信度。</p>
+<h3>局限</h3>
+<h4>1. “General”建立在大量数据筛选之上</h4>
+<p>GMT 会主动删除：</p>
+<ul>
+<li>爬行；</li>
+<li>倒地状态；</li>
+<li>极端动态动作；</li>
+<li>初步策略无法完成的动作。</li>
+</ul>
+<p>论文甚至明确将 back-flipping 和 rolling 作为机器人硬件可能无法完成的动作示例。</p>
+<p>因此，这里的 General 更准确的含义是：</p>
+<blockquote>
+<p>在经过筛选的、机器人可执行的动作分布内实现统一跟踪。</p>
+</blockquote>
+<p>而不是：</p>
+<blockquote>
+<p>任意人体 Motion 都可以由一个策略学会。</p>
+</blockquote>
+<h4>2. 对高动态空翻没有直接验证</h4>
+<p>论文展示的困难动作主要是高踢腿、旋转、跑步、拳击等，缺少空翻、落地恢复等具有完整腾空阶段的技能。</p>
+<h4>3. 缺乏接触丰富的地面技能</h4>
+<p>作者明确指出，当前系统不支持倒地起身和地面翻滚等 Contact-Rich Skills，也没有针对复杂接触行为进行专门建模。</p>
+<h4>4. 没有复杂地形能力</h4>
+<p>GMT 没有输入地形观测，也没有针对斜坡和楼梯进行训练。因此，它的 General Motion Tracking 主要建立在平坦地面条件下。</p>
+<h4>5. Baseline 范围较窄</h4>
+<p>定量对比主要集中在作者重新实现的 ExBody2，而且 Baseline 和消融实验主要评估特权教师策略。</p>
+<p>真实机器人部分主要是视频展示，缺少按动作类别划分的成功率、摔倒率和长期稳定性统计。</p>
+<h4>6. MoE 的专家分析还不充分</h4>
+<p>论文展示了门控权重随动作阶段变化，但没有深入报告：</p>
+<ul>
+<li>每个专家的长期负载；</li>
+<li>是否发生专家坍缩；</li>
+<li>不同专家真正学习了什么；</li>
+<li>专家数量变化对结果的影响；</li>
+<li>MoE 是否优于同等计算量的其他高容量结构。</li>
+</ul>
+<p>因此，现有结果能说明 MoE 有效，但还不能完全解释其内部机制。</p>
+<h4>7. 开源完整度有限</h4>
+<p>截至当前，官方仓库主要提供 MuJoCo Sim-to-Sim 脚本、预训练模型和少量示例 Motion。仓库仍注明数据处理和重定向代码将后续发布，完整训练管线的复现条件有限。</p>
+<hr>
+<h2>7. 总结</h2>
+<p>这篇论文解决了：</p>
+<blockquote>
+<p>如何从大规模、分布不均衡的 Motion 数据中，训练一个能够部署到真实人形机器人的统一全身运动跟踪策略。</p>
+</blockquote>
+<p>核心方法是：</p>
+<blockquote>
+<p>使用 Adaptive Sampling 集中训练困难动作，使用 Motion MoE 提高策略容量，并结合未来 Motion 输入和 Teacher-Student 蒸馏完成真实部署。</p>
+</blockquote>
+<p>它能够有效工作的原因是：</p>
+<blockquote>
+<p>它没有让所有动作共享完全相同的训练资源和模型表示，而是根据动作难度动态分配训练样本，并允许不同专家承担不同运动模式。</p>
+</blockquote></article></main><aside class="toc"><b>文章目录</b><nav id="toc"></nav></aside></div>
+<script>(()=>{const hs=[...document.querySelectorAll('#article h1,#article h2,#article h3')],toc=document.querySelector('#toc');hs.forEach((h,i)=>{h.id='section-'+i;const a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent||'';a.dataset.level=h.tagName.slice(1);toc.appendChild(a)})})()</script></body></html>
