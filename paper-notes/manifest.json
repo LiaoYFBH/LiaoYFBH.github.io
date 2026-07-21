@@ -1,5 +1,11 @@
 [
   {
+    "slug": "omnih2o",
+    "title": "OmniH2O",
+    "path": "humanoid-robot-control/omnih2o",
+    "updatedAt": "2026-07-21T05:24:25.653Z"
+  },
+  {
     "slug": "gmt-general-motion-tracking",
     "title": "GMT: General Motion Tracking",
     "path": "humanoid-robot-control/gmt-general-motion-tracking",
