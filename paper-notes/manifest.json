@@ -1,5 +1,11 @@
 [
   {
+    "slug": "gmt-general-motion-tracking",
+    "title": "GMT: General Motion Tracking",
+    "path": "humanoid-robot-control/gmt-general-motion-tracking",
+    "updatedAt": "2026-07-23T13:08:00.365Z"
+  },
+  {
     "slug": "sonic",
     "title": "SONIC",
     "path": "humanoid-robot-control/sonic",
@@ -10,11 +16,5 @@
     "title": "OmniH2O",
     "path": "humanoid-robot-control/omnih2o",
     "updatedAt": "2026-07-21T05:24:25.653Z"
-  },
-  {
-    "slug": "gmt-general-motion-tracking",
-    "title": "GMT: General Motion Tracking",
-    "path": "humanoid-robot-control/gmt-general-motion-tracking",
-    "updatedAt": "2026-07-20T08:41:51.097Z"
   }
 ]
